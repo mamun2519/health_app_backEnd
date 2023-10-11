@@ -3,6 +3,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import globalErrorHandler from './app/middleware/globalErrorHandler'
 import { RootRoutes } from './app/routes'
+
 //root Application
 const app: Application = express()
 
