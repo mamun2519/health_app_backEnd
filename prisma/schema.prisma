@@ -1,3 +1,6 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -8,16 +11,258 @@ datasource db {
 }
 
 model Test {
-  id   String @id
+  id   String @id @default(uuid())
   name String
 }
 
-model appoinment {
-  id              String            @id
+model User {
+  id              String           @id @default(uuid())
+  email           String
+  password        String
+  role            UserRole         @default(User)
+  status          UserStatus       @default(Active)
+  verified        UserVerification @default(false)
+  bloodDonor      BloodDonor?
+  doctor          Doctor?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  profile         Profile?
+  donorRequests   DonorRequest[]
+  notifications   Notification[]
+  donorReviews    DonorReview[]
+  ServiceReview   ServiceReview[]
+  appointments    Appointment[]
+  prescriptions   Prescription[]
+  meetingRequests MeetingRequest[]
+  payments        Payment[]
+  Withdraw        Withdraw[]
+
+  @@map("users")
+}
+
+// note donnet date type DateTime
+model BloodDonor {
+  id                  String         @id @default(uuid())
+  total_donnet        Int            @default(0)
+  last_donnet_date    String?
+  reward              Int            @default(0)
+  totalPendingRequest Int            @default(0)
+  user_id             String         @unique
+  user                User           @relation(fields: [user_id], references: [id])
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  donorRequests       DonorRequest[]
+  donorReviews        DonorReview[]
+
+  @@map("blood-donors")
+}
+
+model Doctor {
+  id             String           @id @default(uuid())
+  specialist     String
+  degree         String           @default("Doctor of Medicine (M.D.)")
+  experience     String
+  total_patient  Int              @default(0)
+  balance        Int              @default(0)
+  user_id        String           @unique
+  user           User             @relation(fields: [user_id], references: [id])
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  doctorServices DoctorService[]
+  appointments   Appointment[]
+  googleMeets    GoogleMeet[]
+  payments       Payment[]
+  withdraws      Withdraw[]
+  prescription   Prescription[]
+  meetingRequest MeetingRequest[]
+  serviceOffer   ServiceOffer[]
+
+  @@map("doctors")
+}
+
+model Profile {
+  id                String            @id @default(uuid())
+  user_name         String
+  first_name        String
+  last_name         String
+  gender            String?
+  date_of_birth     String?
+  blood_group       String?
+  phone             String?
+  avatar            String
+  cover             String?
+  present_Address   PresentAddress?
+  permanent_Address PermanentAddress?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  education         Education[]
+  user_id           String            @unique
+  user              User              @relation(fields: [user_id], references: [id])
+
+  @@map("user-profiles")
+}
+
+model PresentAddress {
+  id             String   @id @default(uuid())
+  district       String
+  sub_district   String
+  police_station String?
+  address        String
+  profile_Id     String   @unique
+  profile        Profile  @relation(fields: [profile_Id], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("present-address")
+}
+
+model PermanentAddress {
+  id             String   @id @default(uuid())
+  district       String
+  sub_district   String
+  police_station String?
+  address        String
+  profile_Id     String   @unique
+  profile        Profile  @relation(fields: [profile_Id], references: [id])
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@map("permanent-address")
+}
+
+model Education {
+  id             String  @id @default(uuid())
+  institute      String
+  pass_year      String
+  GPA            String
+  completionYear String
+  profile_id     String
+  profile        Profile @relation(fields: [profile_id], references: [id])
+  // createdAt      DateTime @default(now())
+  // updatedAt      DateTime @updatedAt
+
+  @@map("education")
+}
+
+model DonorRequest {
+  id               String             @id @default(uuid())
+  userId           String
+  user             User               @relation(fields: [userId], references: [id])
+  donorId          String
+  donor            BloodDonor         @relation(fields: [donorId], references: [id])
+  status           DonorRequestStatus @default(Pending)
+  location         String
+  pratienCondition String
+  phone            String
+  donnetDate       String
+  quantity         Int
+  // createdAt        DateTime           @default(now())
+  // updatedAt        DateTime           @updatedAt
+
+  @@map("donor_request")
+}
+
+model Notification {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  message    String
+  readStatus Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("notifications")
+}
+
+model DonorReview {
+  id         String     @id @default(uuid())
+  donorId    String
+  bloodDonor BloodDonor @relation(fields: [donorId], references: [id])
+  userId     String
+  user       User       @relation(fields: [userId], references: [id])
+  comment    String
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@map("donor_review")
+}
+
+model DoctorService {
+  id             String          @id @default(uuid())
+  doctorId       String
+  doctor         Doctor          @relation(fields: [doctorId], references: [id])
+  title          String
+  serviceDay     String[]
+  category       String
+  price          String
+  avatar         String
+  aboutSerivce   String
+  serviceType    String
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  serviceSalt    ServiceSalt?
+  serviceOffers  ServiceOffer[]
+  serviceReviews ServiceReview[]
+  appointments   Appointment[]
+  GoogleMeet     GoogleMeet[]
+  payments       Payment[]
+
+  @@map("doctor_service")
+}
+
+model ServiceSalt {
+  id        String         @id @default(uuid())
+  serviceId String         @unique
+  duration  String
+  service   DoctorService? @relation(fields: [serviceId], references: [id])
+  salt      String[]
+  startTime String
+  endTime   String
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@map("doctor_service_salt")
+}
+
+model ServiceOffer {
+  id         String                   @id @default(uuid())
+  serviceId  String?                  @unique
+  service    DoctorService?           @relation(fields: [serviceId], references: [id])
+  offerTitle String
+  promoCode  String
+  discount   Int
+  expireDate String
+  doctorId   String
+  doctor     Doctor                   @relation(fields: [doctorId], references: [id])
+  status     doctorServiceOfferStatus @default(Active)
+  createdAt  DateTime                 @default(now())
+  updatedAt  DateTime                 @updatedAt
+
+  @@map("doctor_service_offer")
+}
+
+model ServiceReview {
+  id        String         @id @default(uuid())
+  service   DoctorService? @relation(fields: [serviceId], references: [id])
+  serviceId String?
+
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  comment   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("doctor_service_review")
+}
+
+model Appointment {
+  id              String            @id @default(uuid())
   createdAt       DateTime          @default(now())
-  updatedAt       DateTime
+  updatedAt       DateTime          @updatedAt
   doctorId        String
+  doctor          Doctor            @relation(fields: [doctorId], references: [id])
   userId          String
+  user            User              @relation(fields: [userId], references: [id])
   bookingDate     String
   gender          userGender
   age             Int
@@ -28,341 +273,186 @@ model appoinment {
   patientProblem  String
   report          String
   address         String
+  serviceId       String
+  service         DoctorService     @relation(fields: [serviceId], references: [id])
   status          appointmentStatus @default(Pending)
-  serviceId       String
-  doctors         doctors           @relation(fields: [doctorId], references: [id])
-  doctor_service  doctor_service    @relation(fields: [serviceId], references: [id])
-  users           users             @relation(fields: [userId], references: [id])
-  meeting_request meeting_request[]
-  prescriptions   prescriptions[]
+  prescriptions   Prescription[]
+  meetingRequests MeetingRequest[]
+
+  @@map("appoinment")
 }
 
-model blood_donors {
-  id                  String          @id
-  total_donnet        Int             @default(0)
-  last_donnet_date    String?
-  reward              Int             @default(0)
-  user_id             String          @unique
-  createdAt           DateTime        @default(now())
-  updatedAt           DateTime
-  totalPendingRequest Int             @default(0)
-  users               users           @relation(fields: [user_id], references: [id])
-  donor_request       donor_request[]
-  donor_review        donor_review[]
+model Prescription {
+  id            String                 @id @default(uuid())
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+  appointmentId String
+  appointment   Appointment            @relation(fields: [appointmentId], references: [id])
+  title         String
+  userId        String
+  user          User                   @relation(fields: [userId], references: [id])
+  submitDate    String
+  advice        String
+  doctorId      String
+  doctor        Doctor                 @relation(fields: [doctorId], references: [id])
+  status        PrescriptionEnumStatus @default(Pending)
+  medicines     Medicine[]
+  healtReports  HealtReport[]
 
-  @@map("blood-donors")
+  @@map("prescriptions")
 }
 
-model company_balance {
-  id        String   @id
-  createdAt DateTime @default(now())
-  updatedAt DateTime
-  balance   Int
-}
-
-model doctor_service {
-  id                    String                  @id
-  doctorId              String
-  title                 String
-  price                 String
-  avatar                String
-  aboutSerivce          String
-  serviceType           String
-  createdAt             DateTime                @default(now())
-  updatedAt             DateTime
-  serviceDay            String[]
-  category              String
-  appoinment            appoinment[]
-  doctors               doctors                 @relation(fields: [doctorId], references: [id])
-  doctor_service_offer  doctor_service_offer?
-  doctor_service_review doctor_service_review[]
-  doctor_service_salt   doctor_service_salt?
-  google_meet           google_meet[]
-  payment               payment[]
-}
-
-model doctor_service_offer {
-  id             String                   @id
-  serviceId      String?                  @unique
-  offerTitle     String
-  promoCode      String
-  discount       Int
-  expireDate     String
-  status         doctorServiceOfferStatus @default(Active)
-  createdAt      DateTime                 @default(now())
-  updatedAt      DateTime
-  doctorId       String
-  doctors        doctors                  @relation(fields: [doctorId], references: [id])
-  doctor_service doctor_service?          @relation(fields: [serviceId], references: [id])
-}
-
-model doctor_service_review {
-  id             String          @id
-  serviceId      String?
-  userId         String
-  comment        String
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime
-  doctor_service doctor_service? @relation(fields: [serviceId], references: [id])
-  users          users           @relation(fields: [userId], references: [id])
-}
-
-model doctor_service_salt {
-  id             String         @id
-  serviceId      String         @unique
-  startTime      String
-  endTime        String
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime
-  duration       String
-  salt           String[]
-  doctor_service doctor_service @relation(fields: [serviceId], references: [id])
-}
-
-model doctors {
-  id                   String                 @id
-  total_patient        Int                    @default(0)
-  balance              Int                    @default(0)
-  user_id              String                 @unique
-  createdAt            DateTime               @default(now())
-  updatedAt            DateTime
-  experience           String
-  specialist           String
-  degree               String                 @default("Doctor of Medicine (M.D.)")
-  appoinment           appoinment[]
-  doctor_service       doctor_service[]
-  doctor_service_offer doctor_service_offer[]
-  users                users                  @relation(fields: [user_id], references: [id])
-  google_meet          google_meet[]
-  meeting_request      meeting_request[]
-  payment              payment[]
-  prescriptions        prescriptions[]
-  withdraw             withdraw[]
-}
-
-model donor_request {
-  id               String             @id
-  userId           String
-  donorId          String
-  status           DonorRequestStatus @default(Pending)
-  location         String
-  pratienCondition String
-  phone            String
-  donnetDate       String
-  quantity         Int
-  blood_donors     blood_donors       @relation(fields: [donorId], references: [id])
-  users            users              @relation(fields: [userId], references: [id])
-}
-
-model donor_review {
-  id           String       @id
-  donorId      String
-  userId       String
-  comment      String
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime
-  blood_donors blood_donors @relation(fields: [donorId], references: [id])
-  users        users        @relation(fields: [userId], references: [id])
-}
-
-model education {
-  id             String        @id
-  institute      String
-  pass_year      String
-  GPA            String
-  completionYear String
-  profile_id     String
-  user_profiles  user_profiles @relation(fields: [profile_id], references: [id])
-}
-
-model google_meet {
-  id              String            @id
-  createdAt       DateTime          @default(now())
-  updatedAt       DateTime
-  serviceId       String
-  meetLink        String
-  status          meetingEnumStatus @default(Active)
-  doctorId        String
-  doctors         doctors           @relation(fields: [doctorId], references: [id])
-  doctor_service  doctor_service    @relation(fields: [serviceId], references: [id])
-  meeting_request meeting_request[]
-
-  @@map("google-meet")
-}
-
-model healtReport {
-  id             String        @id
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime
+model Medicine {
+  id             String       @id @default(uuid())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
   prescriptionId String
-  testName       String
-  description    String
-  prescriptions  prescriptions @relation(fields: [prescriptionId], references: [id])
-}
-
-model medicine {
-  id             String        @id
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime
-  prescriptionId String
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id])
   durgName       String
   eatingTime     String[]
   duration       String
   advice         String
   eat            String
-  prescriptions  prescriptions @relation(fields: [prescriptionId], references: [id])
+
+  @@map("medicine")
 }
 
-model meeting_request {
-  id            String      @id
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime
-  meetingId     String
-  userId        String
-  appointmentId String
-  phoneNumber   String
-  serialNo      Int
-  verifay       Boolean
-  doctorId      String
-  appoinment    appoinment  @relation(fields: [appointmentId], references: [id])
-  doctors       doctors     @relation(fields: [doctorId], references: [id])
-  google_meet   google_meet @relation(fields: [meetingId], references: [id])
-  users         users       @relation(fields: [userId], references: [id])
+model HealtReport {
+  id             String       @id @default(uuid())
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  prescriptionId String
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id])
+  testName       String
+  description    String
+
+  @@map("healtReport")
 }
 
-model notifications {
-  id         String   @id
-  userId     String
-  message    String
-  readStatus Boolean  @default(false)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime
-  users      users    @relation(fields: [userId], references: [id])
-}
-
-model payment {
-  id              String         @id
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime
-  userId          String
+model GoogleMeet {
+  id              String            @id @default(uuid())
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
   serviceId       String
+  service         DoctorService     @relation(fields: [serviceId], references: [id])
+  meetLink        String
   doctorId        String
-  transactionId   String
-  paymentType     String
-  status          String         @default("Complete")
-  price           Int
-  discountedPrice Int            @default(0)
-  doctors         doctors        @relation(fields: [doctorId], references: [id])
-  doctor_service  doctor_service @relation(fields: [serviceId], references: [id])
-  users           users          @relation(fields: [userId], references: [id])
+  doctor          Doctor            @relation(fields: [doctorId], references: [id])
+  status          meetingEnumStatus @default(Active)
+  meetingRequests MeetingRequest[]
+
+  @@map("google-meet")
 }
 
-model permanent_address {
-  id             String        @id
-  district       String
-  sub_district   String
-  police_station String?
-  address        String
-  profile_Id     String        @unique
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime
-  user_profiles  user_profiles @relation(fields: [profile_Id], references: [id])
-
-  @@map("permanent-address")
-}
-
-model prescriptions {
-  id            String                 @id
-  createdAt     DateTime               @default(now())
-  updatedAt     DateTime
-  appointmentId String
-  title         String
+model MeetingRequest {
+  id            String      @id @default(uuid())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  meetingId     String
+  googleMeet    GoogleMeet  @relation(fields: [meetingId], references: [id])
   userId        String
-  submitDate    String
-  advice        String
+  user          User        @relation(fields: [userId], references: [id])
+  appointmentId String
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  serialNo      Int
   doctorId      String
-  status        PrescriptionEnumStatus @default(Pending)
-  healtReport   healtReport[]
-  medicine      medicine[]
-  appoinment    appoinment             @relation(fields: [appointmentId], references: [id])
-  doctors       doctors                @relation(fields: [doctorId], references: [id])
-  users         users                  @relation(fields: [userId], references: [id])
+  doctor        Doctor      @relation(fields: [doctorId], references: [id])
+  phoneNumber   String
+  verifay       Boolean
+
+  @@map("meeting_request")
 }
 
-model present_address {
-  id             String        @id
-  district       String
-  sub_district   String
-  police_station String?
-  address        String
-  profile_Id     String        @unique
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime
-  user_profiles  user_profiles @relation(fields: [profile_Id], references: [id])
+model Payment {
+  id              String        @id @default(uuid())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  serviceId       String
+  service         DoctorService @relation(fields: [serviceId], references: [id])
+  doctorId        String
+  doctor          Doctor        @relation(fields: [doctorId], references: [id])
+  price           Int
+  transactionId   String
+  discountedPrice Int           @default(0)
+  paymentType     String
+  status          String        @default("Complete")
 
-  @@map("present-address")
+  @@map("payment")
 }
 
-model user_profiles {
-  id                String             @id
-  first_name        String
-  last_name         String
-  gender            String?
-  date_of_birth     String?
-  blood_group       String?
-  phone             String?
-  avatar            String
-  cover             String?
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime
-  user_id           String             @unique
-  user_name         String
-  education         education[]
-  permanent_address permanent_address?
-  present_address   present_address?
-  users             users              @relation(fields: [user_id], references: [id])
-
-  @@map("user-profiles")
-}
-
-model users {
-  id                    String                  @id
-  email                 String
-  password              String
-  createdAt             DateTime                @default(now())
-  updatedAt             DateTime
-  role                  UserRole                @default(User)
-  status                UserStatus              @default(Active)
-  verified              UserVerification        @default(false)
-  appoinment            appoinment[]
-  blood_donors          blood_donors?
-  doctor_service_review doctor_service_review[]
-  doctors               doctors?
-  donor_request         donor_request[]
-  donor_review          donor_review[]
-  meeting_request       meeting_request[]
-  notifications         notifications[]
-  payment               payment[]
-  prescriptions         prescriptions[]
-  user_profiles         user_profiles?
-  withdraw              withdraw[]
-}
-
-model withdraw {
-  id                       String             @id
+model Withdraw {
+  id                       String             @id @default(uuid())
   createdAt                DateTime           @default(now())
-  updatedAt                DateTime
+  updatedAt                DateTime           @updatedAt
   doctorId                 String
+  doctor                   Doctor             @relation(fields: [doctorId], references: [id])
+  amount                   Int
   paymentReciveType        enumPaymentRecive
   number                   String
   bankName                 String?
   status                   WithdrawEnumStatus @default(Pending)
-  withdrawAccptetManagerId String?
-  amount                   Int
   finalAmonut              Int
   companyEarn              Int
-  doctors                  doctors            @relation(fields: [doctorId], references: [id])
-  users                    users?             @relation(fields: [withdrawAccptetManagerId], references: [id])
+  withdrawAccptetManagerId String?
+  user                     User?              @relation(fields: [withdrawAccptetManagerId], references: [id])
+
+  @@map("withdraw")
+}
+
+model CompanyBalance {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  balance   Int
+
+  @@map("company_balance")
+}
+
+enum WithdrawEnumStatus {
+  Pending
+  Cancel
+  Complete
+}
+
+enum enumPaymentRecive {
+  Bank
+  Nogod
+  Bikash
+  MasterCard
+  Paypal
+}
+
+enum meetingEnumStatus {
+  Active
+  Complete
+  Expired
+}
+
+enum PrescriptionEnumStatus {
+  Pending
+  Assing
+  Complete
+}
+
+enum appointmentStatus {
+  Pending
+  Accepted
+  Complete
+  Expired
+  TestSebmit
+}
+
+enum userGender {
+  Male
+  Female
+  Other
+}
+
+enum doctorServiceOfferStatus {
+  Active
+  Expired
 }
 
 enum DonorRequestStatus {
@@ -370,12 +460,6 @@ enum DonorRequestStatus {
   Accepted
   Complete
   Cancel
-}
-
-enum PrescriptionEnumStatus {
-  Pending
-  Assing
-  Complete
 }
 
 enum UserRole {
@@ -396,43 +480,4 @@ enum UserVerification {
   true
   false
   Pending
-}
-
-enum WithdrawEnumStatus {
-  Pending
-  Cancel
-  Complete
-}
-
-enum appointmentStatus {
-  Pending
-  Accepted
-  Complete
-  Expired
-  TestSebmit
-}
-
-enum doctorServiceOfferStatus {
-  Active
-  Expired
-}
-
-enum enumPaymentRecive {
-  Bank
-  Nogod
-  Bikash
-  MasterCard
-  Paypal
-}
-
-enum meetingEnumStatus {
-  Active
-  Complete
-  Expired
-}
-
-enum userGender {
-  Male
-  Female
-  Other
 }
