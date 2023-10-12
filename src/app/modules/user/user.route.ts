@@ -43,7 +43,11 @@ router.get(
   ),
   UserController.userProfile,
 )
-router.get('/my-payment', auth(USER_ROLE.USER), UserController.myPaymentList)
+router.get(
+  '/my-payment',
+  auth(USER_ROLE.USER, USER_ROLE.BLOODDONOR),
+  UserController.myPaymentList,
+)
 router.get('/', UserController.getAllUser)
 router.get('/:id', UserController.getByIdFromDB)
 router.patch('/:id', UserController.updateByIdIntoDB)
