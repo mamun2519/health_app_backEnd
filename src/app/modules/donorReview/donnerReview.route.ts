@@ -7,7 +7,7 @@ import { DonorReviewValidation } from './donorReview.validation'
 const router = express.Router()
 router.post(
   '/',
-  auth(USER_ROLE.USER),
+  auth(USER_ROLE.USER, USER_ROLE.BLOODDONOR),
   ValidationRequest(DonorReviewValidation.create),
   DonorReviewController.createDonorReviewIntoDB,
 )

@@ -227,7 +227,7 @@ const updateDonorRequestStatusByIdFromDB = async (
   ) {
     if (donorRequestData.status == DonorRequestStatus.Cancel) {
       throw new Send_API_Error(StatusCodes.NOT_FOUND, 'already cancel request')
-    } else if (donorRequestData.status == DonorRequestStatus.Complete) {
+    } else if (donorRequestData.status == DonorRequestStatus.Completed) {
       throw new Send_API_Error(
         StatusCodes.NOT_FOUND,
         'Already complete request',
@@ -240,7 +240,7 @@ const updateDonorRequestStatusByIdFromDB = async (
     }
   } else if (
     payload.status == donorRequestData.status &&
-    payload.status !== DonorRequestStatus.Complete
+    payload.status !== DonorRequestStatus.Completed
   ) {
     throw new Send_API_Error(
       StatusCodes.NOT_FOUND,
@@ -291,7 +291,7 @@ const updateDonorRequestStatusByIdFromDB = async (
     })
   }
   // if updated status complete then condition accepted
-  else if (payload.status == DonorRequestStatus.Complete) {
+  else if (payload.status == DonorRequestStatus.Completed) {
     await prisma.$transaction(async transactionClient => {
       const updatedStatus = await transactionClient.donorRequest.update({
         where: {
