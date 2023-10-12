@@ -5,12 +5,15 @@ import { PaymentController } from './payment.controller'
 const route = express.Router()
 route.delete(
   '/:id',
-  auth(USER_ROLE.MANAGER),
-  auth(USER_ROLE.USER),
-  auth(USER_ROLE.BLOODDONOR),
+
+  auth(USER_ROLE.BLOODDONOR, USER_ROLE.USER, USER_ROLE.MANAGER),
   PaymentController.deleteByIdFromDB,
 )
-route.post('/', auth(USER_ROLE.USER), PaymentController.createPayment)
+route.post(
+  '/',
+  auth(USER_ROLE.USER, USER_ROLE.BLOODDONOR),
+  PaymentController.createPayment,
+)
 route.get('/:id', PaymentController.getByIdFromDB)
 route.get('/', auth(USER_ROLE.MANAGER), PaymentController.getAllFromDB)
 route.patch(
