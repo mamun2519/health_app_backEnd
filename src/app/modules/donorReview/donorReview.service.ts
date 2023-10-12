@@ -13,6 +13,7 @@ const createDonorReviewIntoDB = async (
       user_id: authUserId,
     },
   })
+  console.log(payload)
   if (!user) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User not found')
   }
@@ -23,7 +24,7 @@ const createDonorReviewIntoDB = async (
     const message = `${user.user_name} review your profile`
     await transactionClient.notification.create({
       data: {
-        userId: payload.donorId,
+        userId: payload.userId,
         message,
       },
     })

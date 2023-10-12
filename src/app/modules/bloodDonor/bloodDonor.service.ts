@@ -119,7 +119,12 @@ const getByIdFromDB = async (id: string) => {
           present_Address: true,
         },
       },
-      bloodDonor: true,
+      bloodDonor: {
+        include: {
+          donorReviews: true,
+          donorRequests: true,
+        },
+      },
     },
   })
   return donors

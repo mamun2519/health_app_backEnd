@@ -181,6 +181,7 @@ model DonorReview {
   userId     String
   user       User       @relation(fields: [userId], references: [id])
   comment    String
+  rating     Int
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 
