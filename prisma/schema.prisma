@@ -458,7 +458,7 @@ enum doctorServiceOfferStatus {
 enum DonorRequestStatus {
   Pending
   Accepted
-  Complete
+  Completed
   Cancel
 }
 

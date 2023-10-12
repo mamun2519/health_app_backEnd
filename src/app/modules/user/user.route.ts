@@ -15,7 +15,7 @@ router.post(
 )
 router.get(
   '/my-donor-request',
-  auth(USER_ROLE.USER),
+  auth(USER_ROLE.USER, USER_ROLE.BLOODDONOR),
   UserController.myDonorRequest,
 )
 router.get(
