@@ -3,6 +3,7 @@ import {
   DoctorService,
   GoogleMeet,
   Payment,
+  Prescription,
   Prisma,
   User,
   UserRole,
@@ -404,7 +405,15 @@ const myActiveGoogleMeetService = async (
     },
     include: {
       service: true,
-      meetingRequests: true,
+      meetingRequests: {
+        include: {
+          user: {
+            include: {
+              profile: true,
+            },
+          },
+        },
+      },
     },
   })
 }
@@ -718,8 +727,67 @@ const getFilterServiceFromDB = async (
     data: result,
   }
 }
+const myPrescription = async (
+  authUserId: string,
+  options: IPagination,
+): Promise<IFilterResponse<Prescription[]>> => {
+  console.log(authUserId)
+  const { skip, limit, page } = calculatePagination(options)
+  const doctor = await prisma.doctor.findFirst({
+    where: {
+      user_id: authUserId,
+    },
+  })
+  if (!doctor) {
+    throw new Send_API_Error(StatusCodes.NOT_FOUND, 'Doctor Not found')
+  }
+  console.log(doctor)
+
+  const result = await prisma.prescription.findMany({
+    skip,
+    take: limit,
+    where: {
+      doctorId: doctor.id,
+      // status: meetingEnumStatus.Complete,
+    },
+    include: {
+      user: {
+        include: {
+          profile: true,
+        },
+      },
+      medicines: true,
+      healtReports: true,
+    },
+
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? {
+            [options.sortBy]: options.sortOrder,
+          }
+        : {
+            createdAt: 'desc',
+          },
+  })
+
+  const total = await prisma.prescription.count({
+    where: {
+      doctorId: doctor.id,
+      // status: meetingEnumStatus.Complete,
+    },
+  })
+  return {
+    meta: {
+      total,
+      page,
+      limit,
+    },
+    data: result,
+  }
+}
 
 export const Doctor = {
+  myPrescription,
   allDoctorFromDB,
   createServiceIntoDB,
   myServiceFromDB,

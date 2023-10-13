@@ -160,6 +160,18 @@ const myWithdrawList = catchAsync(async (req: Request, res: Response) => {
     data: result.data,
   })
 })
+const myPrescription = catchAsync(async (req: Request, res: Response) => {
+  const user = (req as JwtPayload).user
+  const options = receiveArrayAndReturnObject(req.query, paginationFiled)
+  const result = await Doctor.myPrescription(user.user_id, options)
+  sendApiResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'My Prescription fetched successfully',
+    meta: result.meta,
+    data: result.data,
+  })
+})
 const allDoctorFromDB = catchAsync(async (req: Request, res: Response) => {
   const result = await Doctor.allDoctorFromDB()
   sendApiResponse(res, {
@@ -201,4 +213,5 @@ export const DoctorController = {
   myWithdrawList,
   getFilterServiceFromDB,
   myGoogleMeet,
+  myPrescription,
 }

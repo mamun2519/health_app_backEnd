@@ -6,6 +6,11 @@ import ValidationRequest from '../../middleware/validationRequest'
 import { DoctorServiceValidation } from './doctor.validation'
 const router = express.Router()
 router.get(
+  '/my-prescription',
+  auth(USER_ROLE.DOCTOR),
+  DoctorController.myPrescription,
+)
+router.get(
   '/my-all-meet',
   auth(USER_ROLE.DOCTOR),
   DoctorController.myGoogleMeet,
