@@ -39,6 +39,7 @@ router.get(
     USER_ROLE.USER,
     USER_ROLE.ADMIN,
     USER_ROLE.BLOODDONOR,
+    USER_ROLE.DOCTOR,
     USER_ROLE.MANAGER,
   ),
   UserController.userProfile,

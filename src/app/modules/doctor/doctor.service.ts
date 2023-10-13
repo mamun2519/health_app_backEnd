@@ -354,7 +354,11 @@ const myBookingAppointment = async (
       doctorId: findDoctor?.doctor?.id,
     },
     include: {
-      user: true,
+      user: {
+        include: {
+          profile: true,
+        },
+      },
       service: true,
     },
     orderBy:
@@ -382,7 +386,7 @@ const myBookingAppointment = async (
 
 const myActiveGoogleMeetService = async (
   authUserId: string,
-): Promise<GoogleMeet | null> => {
+): Promise<GoogleMeet[] | null> => {
   const doctor = await prisma.doctor.findFirst({
     where: {
       user_id: authUserId,
@@ -391,10 +395,13 @@ const myActiveGoogleMeetService = async (
   if (!doctor) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'Doctor Not found')
   }
-  return await prisma.googleMeet.findFirst({
+  return await prisma.googleMeet.findMany({
     where: {
       doctorId: doctor.id,
-      status: meetingEnumStatus.Active,
+      // status: meetingEnumStatus.Active,
+    },
+    include: {
+      service: true,
     },
   })
 }
@@ -431,6 +438,53 @@ const myCompletedGoogleMeetService = async (
     where: {
       doctorId: authUserId,
       status: meetingEnumStatus.Complete,
+    },
+  })
+  return {
+    meta: {
+      total,
+      page,
+      limit,
+    },
+    data: result,
+  }
+}
+const myGoogleMeet = async (
+  authUserId: string,
+  options: IPagination,
+): Promise<IFilterResponse<GoogleMeet[]>> => {
+  console.log(authUserId)
+  const { skip, limit, page } = calculatePagination(options)
+  const doctor = await prisma.doctor.findFirst({
+    where: {
+      user_id: authUserId,
+    },
+  })
+  if (!doctor) {
+    throw new Send_API_Error(StatusCodes.NOT_FOUND, 'Doctor Not found')
+  }
+
+  const result = await prisma.googleMeet.findMany({
+    skip,
+    take: limit,
+    where: {
+      doctorId: doctor.user_id,
+      // status: meetingEnumStatus.Complete,
+    },
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? {
+            [options.sortBy]: options.sortOrder,
+          }
+        : {
+            createdAt: 'desc',
+          },
+  })
+  console.log(result)
+  const total = await prisma.googleMeet.count({
+    where: {
+      doctorId: authUserId,
+      // status: meetingEnumStatus.Complete,
     },
   })
   return {
@@ -673,4 +727,5 @@ export const Doctor = {
   myPaymentList,
   myWithdrawList,
   getFilterServiceFromDB,
+  myGoogleMeet,
 }

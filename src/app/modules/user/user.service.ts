@@ -562,7 +562,7 @@ const userProfile = async (user: {
     })
   } else if (user.role === UserRole.Doctor) {
     return await prisma.doctor.findFirst({
-      where: { id: user.user_id },
+      where: { user_id: user.user_id },
       include: {
         user: {
           include: {

@@ -6,6 +6,11 @@ import ValidationRequest from '../../middleware/validationRequest'
 import { DoctorServiceValidation } from './doctor.validation'
 const router = express.Router()
 router.get(
+  '/my-all-meet',
+  auth(USER_ROLE.DOCTOR),
+  DoctorController.myGoogleMeet,
+)
+router.get(
   '/filter-services',
 
   DoctorController.getFilterServiceFromDB,
@@ -41,6 +46,7 @@ router.get(
   auth(USER_ROLE.DOCTOR),
   DoctorController.myActiveGoogleMeetService,
 )
+
 router.get(
   '/my-payment',
   auth(USER_ROLE.DOCTOR),
@@ -55,7 +61,7 @@ router.get(
 router.get('/:id', DoctorController.getByIdFromDB)
 router.patch(
   '/:id',
-  ValidationRequest(DoctorServiceValidation.update),
+  // ValidationRequest(DoctorServiceValidation.update),
   DoctorController.updateByIdIntoDB,
 )
 router.delete('/:id', DoctorController.deleteByIdFromDB)

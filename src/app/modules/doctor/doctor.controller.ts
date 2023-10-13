@@ -124,6 +124,18 @@ const myCompletedGoogleMeetService = catchAsync(
     })
   },
 )
+const myGoogleMeet = catchAsync(async (req: Request, res: Response) => {
+  const user = (req as JwtPayload).user
+  const options = receiveArrayAndReturnObject(req.query, paginationFiled)
+  const result = await Doctor.myGoogleMeet(user.user_id, options)
+  sendApiResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'My all google meet fetched successfully',
+    meta: result.meta,
+    data: result.data,
+  })
+})
 const myPaymentList = catchAsync(async (req: Request, res: Response) => {
   const user = (req as JwtPayload).user
   const options = receiveArrayAndReturnObject(req.query, paginationFiled)
@@ -188,4 +200,5 @@ export const DoctorController = {
   myPaymentList,
   myWithdrawList,
   getFilterServiceFromDB,
+  myGoogleMeet,
 }
