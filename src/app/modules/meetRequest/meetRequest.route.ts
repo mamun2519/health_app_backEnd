@@ -20,7 +20,7 @@ router.get(
 router.get('/:id', MeetingRequestController.getByIdFromDB)
 router.patch(
   '/:id',
-  ValidationRequest(MeetRequestValidation.create),
+  // ValidationRequest(MeetRequestValidation.update),
   MeetingRequestController.updateByIdIntoDB,
 )
 router.delete(

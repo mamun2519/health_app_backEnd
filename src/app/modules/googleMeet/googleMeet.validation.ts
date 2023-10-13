@@ -16,6 +16,7 @@ const update = z.object({
   body: z.object({
     serviceId: z.string().optional(),
     meetLink: z.string().optional(),
+    status: z.string().optional(),
   }),
 })
 

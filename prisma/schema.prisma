@@ -429,6 +429,7 @@ enum meetingEnumStatus {
   Active
   Complete
   Expired
+  Cancel
 }
 
 enum PrescriptionEnumStatus {
