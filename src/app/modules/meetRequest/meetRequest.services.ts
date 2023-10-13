@@ -10,7 +10,6 @@ const createMeetingRequestIntoDB = async (
   authUserId: string,
   payload: MeetingRequest,
 ) => {
-  console.log(payload)
   const user = await prisma.user.findFirst({ where: { id: authUserId } })
   if (!user) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not found')
@@ -26,9 +25,20 @@ const createMeetingRequestIntoDB = async (
   } else {
     payload.verifay = false
   }
+  if (!appointment) {
+    throw new Send_API_Error(StatusCodes.NOT_FOUND, 'Appointment Not found')
+  }
 
   const result = await prisma.meetingRequest.create({
-    data: payload,
+    data: {
+      meetingId: payload.meetingId,
+      appointmentId: payload.appointmentId,
+      verifay: payload.verifay,
+      serialNo: payload.serialNo,
+      phoneNumber: payload.phoneNumber,
+      userId: payload.userId,
+      doctorId: appointment.doctorId,
+    },
   })
   return result
 }
