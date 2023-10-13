@@ -237,6 +237,8 @@ const getByIdFromDB = async (
     time: string
     booking: boolean
   }[] = matchSlatTime(searchAppointment, result?.serviceSalt?.salt as string[])
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   result?.serviceSalt?.salt = finalSlat
 
   return result
@@ -402,6 +404,7 @@ const myActiveGoogleMeetService = async (
     },
     include: {
       service: true,
+      meetingRequests: true,
     },
   })
 }
@@ -470,6 +473,9 @@ const myGoogleMeet = async (
     where: {
       doctorId: doctor.user_id,
       // status: meetingEnumStatus.Complete,
+    },
+    include: {
+      meetingRequests: true,
     },
     orderBy:
       options.sortBy && options.sortOrder

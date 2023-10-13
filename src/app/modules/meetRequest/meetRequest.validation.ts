@@ -15,9 +15,9 @@ const create = z.object({
     phoneNumber: z.string({
       required_error: 'phoneNumber Is Required',
     }),
-    doctorId: z.string({
-      required_error: 'doctorId Is Required',
-    }),
+    // doctorId: z.string({
+    //   required_error: 'doctorId Is Required',
+    // }),
   }),
 })
 

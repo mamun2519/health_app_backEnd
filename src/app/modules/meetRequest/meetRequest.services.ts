@@ -10,6 +10,7 @@ const createMeetingRequestIntoDB = async (
   authUserId: string,
   payload: MeetingRequest,
 ) => {
+  console.log(payload)
   const user = await prisma.user.findFirst({ where: { id: authUserId } })
   if (!user) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not found')
@@ -28,13 +29,6 @@ const createMeetingRequestIntoDB = async (
 
   const result = await prisma.meetingRequest.create({
     data: payload,
-    include: {
-      googleMeet: {
-        include: {
-          service: true,
-        },
-      },
-    },
   })
   return result
 }
