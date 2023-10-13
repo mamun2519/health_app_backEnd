@@ -751,6 +751,11 @@ const myPrescription = async (
       // status: meetingEnumStatus.Complete,
     },
     include: {
+      appointment: {
+        include: {
+          service: true,
+        },
+      },
       user: {
         include: {
           profile: true,
