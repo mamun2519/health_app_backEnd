@@ -79,6 +79,20 @@ const userDonorRequest = catchAsync(async (req: Request, res: Response) => {
     data: result.data,
   })
 })
+const AllDonorRequest = catchAsync(async (req: Request, res: Response) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+  const pagination = receiveArrayAndReturnObject(req.query, paginationFiled)
+  const result = await BloodDonorService.AllDonorRequest(pagination)
+
+  sendApiResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'All Donor Request Fetch Successfully',
+    meta: result.meta,
+    data: result.data,
+  })
+})
 const getByIdDonorRequestFromDB = catchAsync(
   async (req: Request, res: Response) => {
     const result = await BloodDonorService.getByIdDonorRequestFromDB(
@@ -147,4 +161,5 @@ export const BloodDonorController = {
   updateDonorRequestStatusByIdFromDB,
   donorRequestUpdateByIdIntoDB,
   deleteDonorRequestByIdFromDB,
+  AllDonorRequest,
 }

@@ -9,8 +9,9 @@ import {
 } from './prescription.interface'
 import { IPagination } from '../../../interface/pagination'
 import { calculatePagination } from '../../../helper/paginationHalper'
-import { PrescriptionSearchAbleFiled } from './prescription.constant'
+
 import { IFilterResponse } from '../../../interface/userFilteResponse'
+import { PrescriptionSearchAbleFiled } from '../serviceOffer/serviceOffer.constant'
 
 const insetIntoDB = async (
   data: IPrescriptionRequestedData,
@@ -129,6 +130,16 @@ const getAllFromDB = async (
     take: limit,
     where: whereConditions,
     include: {
+      user: {
+        include: {
+          profile: true,
+        },
+      },
+      appointment: {
+        include: {
+          service: true,
+        },
+      },
       healtReports: true,
       medicines: true,
     },

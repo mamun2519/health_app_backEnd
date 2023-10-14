@@ -18,7 +18,7 @@ const insetIntoDB = catchAsync(async (req: Request, res: Response) => {
   })
 })
 const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
-  const result = await GoogleMeetService.getByIdFromDB(req.body)
+  const result = await GoogleMeetService.getByIdFromDB(req.params.id)
   sendApiResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,

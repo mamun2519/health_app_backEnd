@@ -626,6 +626,9 @@ const allDoctorFromDB = async (): Promise<User[]> => {
     include: {
       doctor: {
         include: {
+          user: {
+            include: { profile: true },
+          },
           doctorServices: true,
         },
       },

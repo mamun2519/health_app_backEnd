@@ -176,7 +176,32 @@ const userDonorRequest = async (
     data: result,
   }
 }
+const AllDonorRequest = async (
+  pagination: IPagination,
+): Promise<IFilterResponse<DonorRequest[]>> => {
+  const { page, skip, limit } = calculatePagination(pagination)
+  const result = await prisma.donorRequest.findMany({
+    skip,
+    take: limit,
 
+    include: {
+      user: {
+        include: {
+          profile: true,
+        },
+      },
+    },
+  })
+  const total = await prisma.donorRequest.count({})
+  return {
+    meta: {
+      total,
+      page,
+      limit,
+    },
+    data: result,
+  }
+}
 const getByIdDonorRequestFromDB = async (
   id: string,
 ): Promise<DonorRequest | null> => {
@@ -399,4 +424,5 @@ export const BloodDonorService = {
   updateDonorRequestStatusByIdFromDB,
   donorRequestUpdateByIdIntoDB,
   deleteDonorRequestByIdFromDB,
+  AllDonorRequest,
 }

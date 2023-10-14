@@ -41,6 +41,7 @@ const insetIntoDB = async (
 }
 
 const getByIdFromDB = async (id: string): Promise<GoogleMeet | null> => {
+  console.log(id)
   return await prisma.googleMeet.findFirst({
     where: { id },
     include: {

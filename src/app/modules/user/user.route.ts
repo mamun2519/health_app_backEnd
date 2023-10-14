@@ -8,6 +8,16 @@ router.get(
 
   UserController.filtersDoctorFromDB,
 )
+router.get(
+  '/all-user',
+
+  UserController.AllUserFromDb,
+)
+router.get(
+  '/all-admin',
+
+  UserController.AllAdminFromDB,
+)
 router.post(
   '/request-donor',
   auth(USER_ROLE.USER, USER_ROLE.BLOODDONOR),
@@ -40,7 +50,7 @@ router.get(
     USER_ROLE.ADMIN,
     USER_ROLE.BLOODDONOR,
     USER_ROLE.DOCTOR,
-    USER_ROLE.MANAGER,
+    USER_ROLE.ADMIN,
   ),
   UserController.userProfile,
 )
@@ -49,6 +59,7 @@ router.get(
   auth(USER_ROLE.USER, USER_ROLE.BLOODDONOR),
   UserController.myPaymentList,
 )
+router.delete('/delete-user/:id', UserController.deleteUser)
 router.get('/', UserController.getAllUser)
 router.get('/:id', UserController.getByIdFromDB)
 router.patch('/:id', UserController.updateByIdIntoDB)

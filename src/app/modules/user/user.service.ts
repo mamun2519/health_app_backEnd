@@ -594,6 +594,50 @@ const userProfile = async (user: {
     })
   }
 }
+
+const deleteUser = async (id: string): Promise<User | null> => {
+  return prisma.user.delete({ where: { id } })
+}
+const AllUserFromDb = async (): Promise<User[]> => {
+  const result = await prisma.user.findMany({
+    where: {
+      role: UserRole.User,
+    },
+    include: {
+      doctor: {
+        include: {
+          user: {
+            include: { profile: true },
+          },
+          doctorServices: true,
+        },
+      },
+      profile: true,
+    },
+  })
+
+  return result
+}
+const AllAdminFromDB = async (): Promise<User[]> => {
+  const result = await prisma.user.findMany({
+    where: {
+      role: UserRole.Admin,
+    },
+    include: {
+      doctor: {
+        include: {
+          user: {
+            include: { profile: true },
+          },
+          doctorServices: true,
+        },
+      },
+      profile: true,
+    },
+  })
+
+  return result
+}
 export const UserService = {
   userProfile,
   filtersDoctorFromDB,
@@ -606,4 +650,7 @@ export const UserService = {
   myAppointment,
   myPrescription,
   myPaymentList,
+  deleteUser,
+  AllUserFromDb,
+  AllAdminFromDB,
 }

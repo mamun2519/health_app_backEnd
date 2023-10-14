@@ -4,6 +4,7 @@ import { auth } from '../../middleware/auth'
 import { USER_ROLE } from '../../../enum/user'
 const router = express.Router()
 router.get('/all-donor', BloodDonorController.getAllFromDB)
+router.get('/all-request', BloodDonorController.AllDonorRequest)
 router.get(
   '/user-request',
   auth(USER_ROLE.BLOODDONOR),

@@ -17,7 +17,7 @@ import { checkUser, checkUserName, getProfileById } from './auth.utils'
 import { Profile, User, UserRole, UserStatus } from '@prisma/client'
 
 const createUserFromDB = async (data: IUserRequest): Promise<IUserResponse> => {
-  const { name, avatar, email, password } = data
+  const { name, avatar, email, password, role } = data
   const isExistUser = await checkUser(email)
   if (isExistUser) {
     throw new Send_API_Error(StatusCodes.BAD_REQUEST, 'User already exist!')
@@ -38,14 +38,27 @@ const createUserFromDB = async (data: IUserRequest): Promise<IUserResponse> => {
     userName = userNameGenerator(name.last_name)
   }
   const result = await prisma.$transaction(async transactionClient => {
-    const createUser = await transactionClient.user.create({
-      data: {
-        password: hashPassword,
-        email,
-        status: UserStatus.Active,
-      },
-      include: { profile: true },
-    })
+    let createUser
+    if (role) {
+      createUser = await transactionClient.user.create({
+        data: {
+          password: hashPassword,
+          email,
+          status: UserStatus.Active,
+          role: UserRole.Admin,
+        },
+        include: { profile: true },
+      })
+    } else {
+      createUser = await transactionClient.user.create({
+        data: {
+          password: hashPassword,
+          email,
+          status: UserStatus.Active,
+        },
+        include: { profile: true },
+      })
+    }
 
     await transactionClient.profile.create({
       data: {
@@ -89,10 +102,11 @@ const createBloodDonorFromDB = async (
     name,
     email,
     password,
-    permanent_Address,
+    // permanent_Address,
     present_Address,
     ...profileData
   } = data
+
   const isExistDonor = await checkUser(email)
 
   if (isExistDonor) {
@@ -140,12 +154,12 @@ const createBloodDonorFromDB = async (
         ...present_Address,
       },
     })
-    await transactionClient.permanentAddress.create({
-      data: {
-        profile_Id: donorProfile.id,
-        ...permanent_Address,
-      },
-    })
+    // await transactionClient.permanentAddress.create({
+    //   data: {
+    //     profile_Id: donorProfile.id,
+    //     ...permanent_Address,
+    //   },
+    // })
     return createDonor
   })
 
@@ -176,16 +190,18 @@ const createDoctorFromDB = async (
     name,
     email,
     password,
-    permanent_Address,
+    // permanent_Address,
     present_Address,
-    education,
+    // education,
     specialist,
     degree,
     experience,
     ...profileData
   } = data
-
+  console.log(data)
   const isExistDoctor = await checkUser(email)
+  console.log('email', email)
+  console.log(isExistDoctor)
   if (isExistDoctor) {
     throw new Send_API_Error(StatusCodes.BAD_REQUEST, 'User Already exist!')
   }
@@ -235,25 +251,25 @@ const createDoctorFromDB = async (
         ...present_Address,
       },
     })
-    await transactionClient.permanentAddress.create({
-      data: {
-        profile_Id: doctorProfile.id,
-        ...permanent_Address,
-      },
-    })
-    if (education) {
-      for (let i = 0; i < education?.length; i++) {
-        await transactionClient.education.create({
-          data: {
-            profile_id: doctorProfile.id,
-            institute: education[i].institute as string,
-            GPA: education[i].GPA as string,
-            completionYear: education[i].completionYear as string,
-            pass_year: education[i].pass_year as string,
-          },
-        })
-      }
-    }
+    // await transactionClient.permanentAddress.create({
+    //   data: {
+    //     profile_Id: doctorProfile.id,
+    //     ...permanent_Address,
+    //   },
+    // })
+    // if (education) {
+    //   for (let i = 0; i < education?.length; i++) {
+    //     await transactionClient.education.create({
+    //       data: {
+    //         profile_id: doctorProfile.id,
+    //         institute: education[i].institute as string,
+    //         GPA: education[i].GPA as string,
+    //         completionYear: education[i].completionYear as string,
+    //         pass_year: education[i].pass_year as string,
+    //       },
+    //     })
+    //   }
+    // }
     return createDoctor
   })
   const accessToken = jwtHelper.tokenGenerate(

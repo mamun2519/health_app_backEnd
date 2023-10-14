@@ -6,7 +6,7 @@ const route = express.Router()
 route.delete(
   '/:id',
 
-  auth(USER_ROLE.BLOODDONOR, USER_ROLE.USER, USER_ROLE.MANAGER),
+  auth(USER_ROLE.BLOODDONOR, USER_ROLE.USER, USER_ROLE.ADMIN),
   PaymentController.deleteByIdFromDB,
 )
 route.post(
@@ -15,7 +15,7 @@ route.post(
   PaymentController.createPayment,
 )
 route.get('/:id', PaymentController.getByIdFromDB)
-route.get('/', auth(USER_ROLE.MANAGER), PaymentController.getAllFromDB)
+route.get('/', PaymentController.getAllFromDB)
 route.patch(
   '/:id',
   auth(USER_ROLE.USER, USER_ROLE.DOCTOR),

@@ -138,6 +138,34 @@ const userProfile = catchAsync(async (req: Request, res: Response) => {
     data: result,
   })
 })
+
+const deleteUser = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserService.deleteUser(req.params.id)
+  sendApiResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'User Delete Successfully',
+    data: result,
+  })
+})
+const AllUserFromDb = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserService.AllUserFromDb()
+  sendApiResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'User Get Successfully',
+    data: result,
+  })
+})
+const AllAdminFromDB = catchAsync(async (req: Request, res: Response) => {
+  const result = await UserService.AllAdminFromDB()
+  sendApiResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Admin Get Successfully',
+    data: result,
+  })
+})
 export const UserController = {
   getAllUser,
   getByIdFromDB,
@@ -150,4 +178,7 @@ export const UserController = {
   myPaymentList,
   filtersDoctorFromDB,
   userProfile,
+  deleteUser,
+  AllUserFromDb,
+  AllAdminFromDB,
 }

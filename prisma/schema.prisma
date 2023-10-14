@@ -468,7 +468,7 @@ enum UserRole {
   User
   BloodDonor
   Doctor
-  Manager
+  Admin
 }
 
 enum UserStatus {
