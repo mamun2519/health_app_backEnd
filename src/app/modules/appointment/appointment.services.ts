@@ -104,6 +104,14 @@ const getAllFromDB = async (
     where: whereCondition,
     skip,
     take: limit,
+    include: {
+      service: true,
+      user: {
+        include: {
+          profile: true,
+        },
+      },
+    },
 
     orderBy:
       options.sortBy && options.sortOrder
