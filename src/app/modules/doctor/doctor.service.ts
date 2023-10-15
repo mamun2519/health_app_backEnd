@@ -417,6 +417,26 @@ const myActiveGoogleMeetService = async (
     },
   })
 }
+const activeMeet = async (): Promise<GoogleMeet | null> => {
+  return await prisma.googleMeet.findFirst({
+    where: {
+      status: 'Active',
+      // status: meetingEnumStatus.Active,
+    },
+    include: {
+      service: true,
+      meetingRequests: {
+        include: {
+          user: {
+            include: {
+              profile: true,
+            },
+          },
+        },
+      },
+    },
+  })
+}
 const myCompletedGoogleMeetService = async (
   authUserId: string,
   options: IPagination,
@@ -810,4 +830,5 @@ export const Doctor = {
   myWithdrawList,
   getFilterServiceFromDB,
   myGoogleMeet,
+  activeMeet,
 }

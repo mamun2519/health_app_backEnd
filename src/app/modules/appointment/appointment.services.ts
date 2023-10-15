@@ -138,7 +138,11 @@ const getByIdFromDB = async (id: string): Promise<Appointment | null> => {
   return await prisma.appointment.findFirst({
     where: { id },
     include: {
-      service: true,
+      service: {
+        include: {
+          GoogleMeet: true,
+        },
+      },
       doctor: {
         include: {
           user: {

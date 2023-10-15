@@ -56,6 +56,11 @@ router.get(
   auth(USER_ROLE.DOCTOR),
   DoctorController.myActiveGoogleMeetService,
 )
+router.get(
+  '/active-meet',
+
+  DoctorController.activeMeet,
+)
 
 router.get(
   '/my-withdraw',

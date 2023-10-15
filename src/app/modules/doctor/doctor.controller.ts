@@ -107,6 +107,15 @@ const myActiveGoogleMeetService = catchAsync(
     })
   },
 )
+const activeMeet = catchAsync(async (req: Request, res: Response) => {
+  const result = await Doctor.activeMeet()
+  sendApiResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'My active google meet fetched successfully',
+    data: result,
+  })
+})
 const myCompletedGoogleMeetService = catchAsync(
   async (req: Request, res: Response) => {
     const user = (req as JwtPayload).user
@@ -214,4 +223,5 @@ export const DoctorController = {
   getFilterServiceFromDB,
   myGoogleMeet,
   myPrescription,
+  activeMeet,
 }

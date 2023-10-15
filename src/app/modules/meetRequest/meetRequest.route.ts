@@ -8,7 +8,7 @@ import { MeetRequestValidation } from './meetRequest.validation'
 const router = express.Router()
 router.post(
   '/',
-  auth(USER_ROLE.USER),
+  auth(USER_ROLE.USER, USER_ROLE.BLOODDONOR),
   ValidationRequest(MeetRequestValidation.create),
   MeetingRequestController.createMeetingRequestIntoDB,
 )
