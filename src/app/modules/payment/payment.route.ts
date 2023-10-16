@@ -14,6 +14,11 @@ route.post(
   auth(USER_ROLE.USER, USER_ROLE.BLOODDONOR),
   PaymentController.createPayment,
 )
+route.post(
+  '/booking',
+  auth(USER_ROLE.USER, USER_ROLE.BLOODDONOR),
+  PaymentController.OrderAppointment,
+)
 route.get('/:id', PaymentController.getByIdFromDB)
 route.get('/', PaymentController.getAllFromDB)
 route.patch(

@@ -17,6 +17,7 @@ const insetIntoDB = async (
     where: { id: authUserId },
     include: { profile: true },
   })
+
   if (!user) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not found')
   }

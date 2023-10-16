@@ -52,6 +52,7 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   })
 })
 const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
+  console.log('query', req.query.date)
   const result = await Doctor.getByIdFromDB(
     req.params.id,
     req.query.date as string,

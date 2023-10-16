@@ -1,4 +1,4 @@
-import { CompanyBalance, Payment, Prisma } from '@prisma/client'
+import { Appointment, CompanyBalance, Payment, Prisma } from '@prisma/client'
 import prisma from '../../../prisma/prisma'
 import Send_API_Error from '../../../error/apiError'
 import { StatusCodes } from 'http-status-codes'
@@ -7,6 +7,7 @@ import { IPagination } from '../../../interface/pagination'
 import { calculatePagination } from '../../../helper/paginationHalper'
 import { PaymentSearchAbleFiled } from './payment.constant'
 import { IFilterResponse } from '../../../interface/userFilteResponse'
+import { AppointmentService } from '../appointment/appointment.services'
 
 const createPayment = async (
   authUserId: string,
@@ -17,11 +18,20 @@ const createPayment = async (
   if (!user) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
   }
-  const doctor = await prisma.doctor.findFirst({ where: { id: data.doctorId } })
+
+  // const service = await prisma.doctorService.findFirst({
+  //   where: {
+  //     id: data.serviceId,
+  //   },
+  // })
+  const doctor = await prisma.doctor.findFirst({
+    where: { id: data.doctorId },
+  })
 
   const newBalance = Number(doctor?.balance) + Number(data.price)
 
   data.userId = authUserId
+  data.price = Number(data.price)
   const result = await prisma.$transaction(async transactionClient => {
     const payment = transactionClient.payment.create({ data })
 
@@ -202,7 +212,34 @@ const createCompanyBalance = async (
   return await prisma.companyBalance.create({ data })
 }
 
+const OrderAppointment = async (
+  appointment: Appointment[],
+  payment: Payment[],
+  authUserId: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): Promise<any> => {
+  const user = await prisma.user.findFirst({ where: { id: authUserId } })
+  if (!user) {
+    throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
+  }
+
+  for (let i = 0; i < appointment?.length; i++) {
+    appointment.map(async singleAppointment => {
+      await AppointmentService.insetIntoDB(singleAppointment, authUserId)
+    })
+  }
+  for (let i = 0; i < payment.length; i++) {
+    payment.map(async payment => {
+      await createPayment(authUserId, payment)
+    })
+
+    return {
+      message: 'Success',
+    }
+  }
+}
 export const PaymentService = {
+  OrderAppointment,
   createPayment,
   getAllFromDB,
   getByIdFromDB,

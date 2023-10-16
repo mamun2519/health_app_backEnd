@@ -190,8 +190,9 @@ const getByIdFromDB = async (
   id: string,
   date: string,
 ): Promise<DoctorService | null> => {
+  // console.log(id)
   const cUrrentDate = date == undefined ? currentDate() : date
-  console.log(cUrrentDate)
+  // console.log(cUrrentDate)
   const searchAppointment = await prisma.appointment.findMany({
     where: {
       bookingDate: cUrrentDate,

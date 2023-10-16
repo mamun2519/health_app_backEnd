@@ -267,12 +267,13 @@ model Appointment {
   bookingDate     String
   gender          userGender
   age             Int
+  price           String            @default("0")
   weight          Int
   bloodGroup      String
   serialNo        Int
   slatTime        String
   patientProblem  String
-  report          String
+  report          String?
   address         String
   serviceId       String
   service         DoctorService     @relation(fields: [serviceId], references: [id])

@@ -67,11 +67,28 @@ const createCompanyBalance = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const OrderAppointment = catchAsync(async (req: Request, res: Response) => {
+  console.log(req.body)
+  const user = (req as JwtPayload).user
+  const result = await PaymentService.OrderAppointment(
+    req.body.appointment,
+    req.body.payment,
+    user?.user_id,
+  )
+  sendApiResponse(res, {
+    success: true,
+    message: 'Payment Was Successfully',
+    statusCode: StatusCodes.OK,
+    data: result,
+  })
+})
+
 export const PaymentController = {
   createPayment,
   getAllFromDB,
   getByIdFromDB,
   updateByIdIntoDB,
   deleteByIdFromDB,
+  OrderAppointment,
   createCompanyBalance,
 }
