@@ -6,6 +6,11 @@ import ValidationRequest from '../../middleware/validationRequest'
 import { DoctorServiceValidation } from './doctor.validation'
 const router = express.Router()
 router.get(
+  '/active-meet/:id',
+
+  DoctorController.activeMeet,
+)
+router.get(
   '/my-payment',
   auth(USER_ROLE.DOCTOR),
   DoctorController.myPaymentList,
@@ -55,11 +60,6 @@ router.get(
   '/my-active-meet',
   auth(USER_ROLE.DOCTOR),
   DoctorController.myActiveGoogleMeetService,
-)
-router.get(
-  '/active-meet',
-
-  DoctorController.activeMeet,
 )
 
 router.get(

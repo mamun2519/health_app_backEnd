@@ -165,7 +165,19 @@ const updateByIdIntoDB = async (
   id: string,
   data: Partial<Appointment>,
 ): Promise<Appointment | null> => {
-  return await prisma.appointment.update({ where: { id }, data })
+  console.log(data)
+  if (data.status == 'Reject' || data.status === 'Cancel') {
+    const result = await prisma.appointment.update({
+      where: { id },
+      data: {
+        status: data.status,
+        slatTime: 'Cancel',
+      },
+    })
+    return result
+  } else {
+    return await prisma.appointment.update({ where: { id }, data })
+  }
 }
 
 const deleteByIdFromDB = async (id: string): Promise<Appointment | null> => {

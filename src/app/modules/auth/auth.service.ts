@@ -17,7 +17,7 @@ import { checkUser, checkUserName, getProfileById } from './auth.utils'
 import { Profile, User, UserRole, UserStatus } from '@prisma/client'
 
 const createUserFromDB = async (data: IUserRequest): Promise<IUserResponse> => {
-  const { name, avatar, email, password, role } = data
+  const { name, avatar, cover, email, password, role } = data
   const isExistUser = await checkUser(email)
   if (isExistUser) {
     throw new Send_API_Error(StatusCodes.BAD_REQUEST, 'User already exist!')
@@ -63,6 +63,7 @@ const createUserFromDB = async (data: IUserRequest): Promise<IUserResponse> => {
     await transactionClient.profile.create({
       data: {
         avatar,
+        cover,
         user_name: userName,
         first_name: name.first_name,
         last_name: name.last_name,
@@ -295,6 +296,7 @@ const createDoctorFromDB = async (
 const userLoginIntoDB = async (
   data: ILoginData,
 ): Promise<IUserResponse | null> => {
+  console.log(data)
   let user
   if (data.email) {
     user = await checkUser(data.email as string)

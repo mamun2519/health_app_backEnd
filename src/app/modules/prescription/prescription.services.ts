@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { HealtReport, Medicine, Prescription, Prisma } from '@prisma/client'
+import { Prescription, Prisma } from '@prisma/client'
 import prisma from '../../../prisma/prisma'
 import Send_API_Error from '../../../error/apiError'
 import { StatusCodes } from 'http-status-codes'
@@ -197,41 +197,62 @@ const getByIdFromDB = async (id: string): Promise<Prescription | null> => {
 }
 const updateByIdIntoDB = async (
   id: string,
-  data: IPrescriptionRequestedData,
+  data: any,
 ): Promise<Prescription | null> => {
   const { prescription, haltReport, medicine } = data
+  console.log(data)
   const result = await prisma.prescription.update({
     where: { id },
     data: prescription,
   })
 
-  if (medicine) {
-    for (let i = 0; i < medicine.length; i++) {
-      medicine.map((med: Medicine) =>
-        prisma.medicine.update({
-          where: { id: med.id },
-          data: {
-            duration: med.duration,
-            eat: med.eat,
-            eatingTime: med.eatingTime,
-            advice: med.advice,
-            durgName: med.durgName, // Fixed typo here
-          },
-        }),
-      )
-    }
+  const existMedicine = await prisma.medicine.findFirst({
+    where: { prescriptionId: id },
+  })
+  if (!existMedicine) {
+    throw new Send_API_Error(StatusCodes.NOT_FOUND, 'NOt Found')
   }
-  if (haltReport) {
-    haltReport.map((haltRep: HealtReport) =>
-      prisma.healtReport.update({
-        where: { id: haltRep.id },
-        data: {
-          description: haltRep.description,
-          testName: haltRep.testName,
-        },
-      }),
-    )
-  }
+  const existHealtReport = await prisma.healtReport.findFirst({
+    where: { prescriptionId: id },
+  })
+
+  await prisma.medicine.update({
+    where: { id: existMedicine?.id },
+    data: medicine,
+  })
+
+  await prisma.healtReport.update({
+    where: { id: existHealtReport?.id },
+    data: haltReport,
+  })
+  // todo --feture same work
+  // if (medicine) {
+  //   for (let i = 0; i < medicine.length; i++) {
+  //     medicine.map((med: Medicine) =>
+  //       prisma.medicine.update({
+  //         where: { id: med.id },
+  //         data: {
+  //           duration: med.duration,
+  //           eat: med.eat,
+  //           eatingTime: med.eatingTime,
+  //           advice: med.advice,
+  //           durgName: med.durgName, // Fixed typo here
+  //         },
+  //       }),
+  //     )
+  //   }
+  // }
+  // if (haltReport) {
+  //   haltReport.map((haltRep: HealtReport) =>
+  //     prisma.healtReport.update({
+  //       where: { id: haltRep.id },
+  //       data: {
+  //         description: haltRep.description,
+  //         testName: haltRep.testName,
+  //       },
+  //     }),
+  //   )
+  // }
   return result
 }
 

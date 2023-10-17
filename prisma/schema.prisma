@@ -246,12 +246,12 @@ model ServiceReview {
   id        String         @id @default(uuid())
   service   DoctorService? @relation(fields: [serviceId], references: [id])
   serviceId String?
-
+  rating    Int
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
+  user      User           @relation(fields: [userId], references: [id])
   comment   String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 
   @@map("doctor_service_review")
 }
@@ -444,7 +444,9 @@ enum appointmentStatus {
   Accepted
   Complete
   Expired
+  Reject
   TestSebmit
+  Cancel
 }
 
 enum userGender {

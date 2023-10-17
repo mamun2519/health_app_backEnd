@@ -284,6 +284,7 @@ const updateByIdIntoDB = async (
   id: string,
   data: Partial<ICreatedDoctorServiceData>,
 ): Promise<{ message: string }> => {
+  console.log(data)
   const doctorServices = await prisma.doctorService.findFirst({
     where: { id },
     include: {
@@ -418,10 +419,12 @@ const myActiveGoogleMeetService = async (
     },
   })
 }
-const activeMeet = async (): Promise<GoogleMeet | null> => {
+const activeMeet = async (id: string): Promise<GoogleMeet | null> => {
+  console.log(id)
   return await prisma.googleMeet.findFirst({
     where: {
       status: 'Active',
+      serviceId: id,
       // status: meetingEnumStatus.Active,
     },
     include: {

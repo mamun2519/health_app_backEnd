@@ -109,7 +109,8 @@ const myActiveGoogleMeetService = catchAsync(
   },
 )
 const activeMeet = catchAsync(async (req: Request, res: Response) => {
-  const result = await Doctor.activeMeet()
+  console.log(req.params)
+  const result = await Doctor.activeMeet(req.params.id)
   sendApiResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,

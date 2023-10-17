@@ -10,6 +10,7 @@ export type IUserRequest = {
   avatar: string
   status?: string
   role?: string
+  cover: string
 }
 
 export type IDonorAndDoctorRequest = {

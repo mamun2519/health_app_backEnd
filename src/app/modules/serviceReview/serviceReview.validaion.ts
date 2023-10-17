@@ -9,6 +9,9 @@ const create = z.object({
     comment: z.string({
       required_error: 'comment Is Required',
     }),
+    rating: z.number({
+      required_error: 'comment Is Required',
+    }),
   }),
 })
 
@@ -16,6 +19,7 @@ const update = z.object({
   body: z.object({
     serviceId: z.string().optional(),
     comment: z.string().optional(),
+    rating: z.number().optional(),
   }),
 })
 

@@ -7,6 +7,7 @@ const insetIntoDB = async (
   authUserId: string,
   data: ServiceReview,
 ): Promise<ServiceReview> => {
+  console.log(data)
   const user = await prisma.user.findFirst({
     where: { id: authUserId },
     include: { profile: true },

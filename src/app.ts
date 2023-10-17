@@ -14,6 +14,7 @@ app.use([
   express.urlencoded({ extended: true }),
   cookieParser(),
 ])
+// app.use(express.urlencoded({ extended: true }))
 // application route
 app.use('/api/v1', RootRoutes)
 // test route
