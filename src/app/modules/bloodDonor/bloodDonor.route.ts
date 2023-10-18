@@ -24,12 +24,22 @@ router.patch(
 )
 router.patch(
   '/update-request/:id',
-  auth(USER_ROLE.BLOODDONOR, USER_ROLE.USER),
+  auth(
+    USER_ROLE.BLOODDONOR,
+    USER_ROLE.USER,
+    USER_ROLE.ADMIN,
+    USER_ROLE.SUPER_ADMIN,
+  ),
   BloodDonorController.donorRequestUpdateByIdIntoDB,
 )
 router.delete(
   '/request/:id',
-  auth(USER_ROLE.BLOODDONOR, USER_ROLE.USER),
+  auth(
+    USER_ROLE.BLOODDONOR,
+    USER_ROLE.USER,
+    USER_ROLE.ADMIN,
+    USER_ROLE.SUPER_ADMIN,
+  ),
   BloodDonorController.deleteDonorRequestByIdFromDB,
 )
 export const BloodDonorRoutes = router

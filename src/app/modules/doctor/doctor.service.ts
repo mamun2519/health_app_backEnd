@@ -71,6 +71,7 @@ const getAllFromDB = async (
   filters: IDoctorServiceFilter,
   options: IPagination,
 ): Promise<IFilterResponse<DoctorService[]>> => {
+  console.log(filters)
   const { page, limit, skip } = calculatePagination(options)
   const { searchTerm, ...filterData } = filters
   const andConditions = []
@@ -205,7 +206,15 @@ const getByIdFromDB = async (
     where: { id },
     include: {
       serviceOffers: true,
-      serviceReviews: true,
+      serviceReviews: {
+        include: {
+          user: {
+            include: {
+              profile: true,
+            },
+          },
+        },
+      },
       serviceSalt: true,
     },
   })
@@ -642,8 +651,13 @@ const myWithdrawList = async (
   }
 }
 
-const allDoctorFromDB = async (): Promise<User[]> => {
+const allDoctorFromDB = async (
+  options: IPagination,
+): Promise<IFilterResponse<User[]>> => {
+  const { page, limit, skip } = calculatePagination(options)
   const result = await prisma.user.findMany({
+    skip,
+    take: limit,
     where: {
       role: UserRole.Doctor,
     },
@@ -658,9 +672,24 @@ const allDoctorFromDB = async (): Promise<User[]> => {
       },
       profile: true,
     },
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? {
+            [options.sortBy]: options.sortOrder,
+          }
+        : {
+            createdAt: 'desc',
+          },
   })
 
-  return result
+  return {
+    meta: {
+      total: 100,
+      page,
+      limit,
+    },
+    data: result,
+  }
 }
 
 const getFilterServiceFromDB = async (

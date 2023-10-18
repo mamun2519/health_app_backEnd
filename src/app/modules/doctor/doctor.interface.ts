@@ -10,6 +10,7 @@ export type IDoctorServiceFilter = {
   price?: string
   title?: string
   serviceType?: string
+  category: string
 }
 
-export const ServicerAbleFiled = ['day', 'category', 'duration']
+export const ServicerAbleFiled = ['day', 'category', 'duration', 'category']

@@ -107,7 +107,7 @@ const createBloodDonorFromDB = async (
     present_Address,
     ...profileData
   } = data
-
+  console.log(data)
   const isExistDonor = await checkUser(email)
 
   if (isExistDonor) {

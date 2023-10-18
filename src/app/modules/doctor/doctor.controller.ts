@@ -38,7 +38,7 @@ const myServiceFromDB = catchAsync(async (req: Request, res: Response) => {
 })
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
-  const filter = receiveArrayAndReturnObject(
+  const filter: any = receiveArrayAndReturnObject(
     req.query,
     doctorServiceFilterAbleFiled,
   )
@@ -184,12 +184,14 @@ const myPrescription = catchAsync(async (req: Request, res: Response) => {
   })
 })
 const allDoctorFromDB = catchAsync(async (req: Request, res: Response) => {
-  const result = await Doctor.allDoctorFromDB()
+  const options = receiveArrayAndReturnObject(req.query, paginationFiled)
+  const result = await Doctor.allDoctorFromDB(options)
   sendApiResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
     message: 'All Doctor fetched successfully',
-    data: result,
+    data: result.data,
+    meta: result.meta,
   })
 })
 

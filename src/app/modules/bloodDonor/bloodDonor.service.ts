@@ -85,8 +85,15 @@ const filtersBloodDonorFromDB = async (
   }
 }
 
-const getAllFromDB = async (): Promise<User[]> => {
+const getAllFromDB = async (
+  // filters: IFiltersUserDonorRequest,
+  pagination: IPagination,
+): Promise<IFilterResponse<User[]>> => {
+  const { skip, limit, page } = calculatePagination(pagination)
+
   const donors = await prisma.user.findMany({
+    skip,
+    take: limit,
     where: {
       role: UserRole.BloodDonor,
     },
@@ -100,9 +107,28 @@ const getAllFromDB = async (): Promise<User[]> => {
       },
       bloodDonor: true,
     },
+    orderBy:
+      pagination.sortBy && pagination.sortOrder
+        ? {
+            [pagination.sortBy]: pagination.sortOrder,
+          }
+        : {
+            createdAt: 'desc',
+          },
   })
 
-  return donors
+  const total = await prisma.user.count({
+    where: { role: UserRole.BloodDonor },
+  })
+
+  return {
+    meta: {
+      total,
+      page,
+      limit,
+    },
+    data: donors,
+  }
 }
 
 const getByIdFromDB = async (id: string) => {

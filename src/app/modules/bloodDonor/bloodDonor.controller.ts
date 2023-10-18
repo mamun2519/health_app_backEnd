@@ -35,15 +35,15 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   //   req.query,
   //   bloodDonorFilterAbleFiled,
   // )
-  // const pagination = receiveArrayAndReturnObject(req.query, paginationFiled)
+  const pagination = receiveArrayAndReturnObject(req.query, paginationFiled)
 
-  const result = await BloodDonorService.getAllFromDB()
+  const result = await BloodDonorService.getAllFromDB(pagination)
   sendApiResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
     message: 'Blood donor fetch successfully',
-    // meta: result.meta,
-    data: result,
+    meta: result.meta,
+    data: result.data,
   })
 })
 const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
