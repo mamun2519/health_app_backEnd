@@ -156,7 +156,30 @@ const doctorOfferService = (authUserId, options) => __awaiter(void 0, void 0, vo
         data: result,
     };
 });
+const createCart = (authUserId, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield prisma_1.default.user.findFirst({ where: { id: authUserId } });
+    if (!user) {
+        throw new apiError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, 'User Not Found');
+    }
+    data.userId = authUserId;
+    const result = yield prisma_1.default.cart.create({ data });
+    return result;
+});
+const MyCart = (authUserId) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield prisma_1.default.user.findFirst({ where: { id: authUserId } });
+    if (!user) {
+        throw new apiError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, 'User Not Found');
+    }
+    const result = yield prisma_1.default.cart.findMany({
+        where: {
+            userId: authUserId,
+        },
+    });
+    return result;
+});
 exports.ServiceOfferService = {
+    MyCart,
+    createCart,
     insetIntoDB,
     deleteByIdFromDB,
     updateByIdIntoDB,

@@ -80,11 +80,47 @@ const doctorOfferService = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const addToCart = catchAsync(async (req: Request, res: Response) => {
+  const user = (req as JwtPayload).user
+  // const options = receiveArrayAndReturnObject(req.query, paginationFiled)
+  const result = await ServiceOfferService.createCart(user.user_id, req.body)
+  sendApiResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'Cart create fetched success!',
+    data: result,
+  })
+})
+const MyCart = catchAsync(async (req: Request, res: Response) => {
+  const user = (req as JwtPayload).user
+  // const options = receiveArrayAndReturnObject(req.query, paginationFiled)
+  const result = await ServiceOfferService.MyCart(user.user_id)
+  sendApiResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'My Cart Fetch fetched success!',
+    data: result,
+  })
+})
+const singleCartDelete = catchAsync(async (req: Request, res: Response) => {
+  // const options = receiveArrayAndReturnObject(req.query, paginationFiled)
+  const result = await ServiceOfferService.singleCartDelete(req.params.id)
+  sendApiResponse(res, {
+    success: true,
+    statusCode: StatusCodes.OK,
+    message: 'My Cart Fetch fetched success!',
+    data: result,
+  })
+})
+
 export const OfferServiceController = {
+  addToCart,
   insetIntoDB,
   getByIdFromDB,
   updateByIdIntoDB,
   deleteByIdFromDB,
   getAllFromDB,
+  MyCart,
   doctorOfferService,
+  singleCartDelete,
 }

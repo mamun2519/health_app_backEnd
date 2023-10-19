@@ -1,4 +1,4 @@
-import { Prisma, ServiceOffer } from '@prisma/client'
+import { Cart, Prisma, ServiceOffer } from '@prisma/client'
 import prisma from '../../../prisma/prisma'
 import { IServiceOfferFilter } from './serviceOffer.interface'
 import { IPagination } from '../../../interface/pagination'
@@ -158,11 +158,51 @@ const doctorOfferService = async (
   }
 }
 
+const createCart = async (authUserId: string, data: Cart): Promise<Cart> => {
+  console.log(data)
+  const user = await prisma.user.findFirst({ where: { id: authUserId } })
+  if (!user) {
+    throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
+  }
+  data.userId = authUserId
+  const result = await prisma.cart.create({ data })
+
+  return result
+}
+const MyCart = async (authUserId: string): Promise<Cart[]> => {
+  console.log(authUserId)
+  const user = await prisma.user.findFirst({ where: { id: authUserId } })
+  if (!user) {
+    throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
+  }
+  console.log(user)
+
+  const result = await prisma.cart.findMany({
+    where: {
+      userId: authUserId,
+    },
+    include: {
+      service: true,
+    },
+  })
+  console.log(user)
+
+  return result
+}
+
+const singleCartDelete = async (id: string): Promise<Cart | null> => {
+  const result = await prisma.cart.delete({ where: { id } })
+  return result
+}
+
 export const ServiceOfferService = {
+  MyCart,
+  createCart,
   insetIntoDB,
   deleteByIdFromDB,
   updateByIdIntoDB,
   getByIdFromDB,
   getAllFromDB,
   doctorOfferService,
+  singleCartDelete,
 }

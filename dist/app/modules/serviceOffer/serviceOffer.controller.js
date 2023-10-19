@@ -79,11 +79,35 @@ const doctorOfferService = (0, catchAsync_1.default)((req, res) => __awaiter(voi
         data: result,
     });
 }));
+const addToCart = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = req.user;
+    // const options = receiveArrayAndReturnObject(req.query, paginationFiled)
+    const result = yield serviceOffer_service_1.ServiceOfferService.createCart(user.user_id, req.body);
+    (0, APIResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: 'Cart create fetched success!',
+        data: result,
+    });
+}));
+const MyCart = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = req.user;
+    // const options = receiveArrayAndReturnObject(req.query, paginationFiled)
+    const result = yield serviceOffer_service_1.ServiceOfferService.MyCart(user.user_id);
+    (0, APIResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        message: 'My Cart Fetch fetched success!',
+        data: result,
+    });
+}));
 exports.OfferServiceController = {
+    addToCart,
     insetIntoDB,
     getByIdFromDB,
     updateByIdIntoDB,
     deleteByIdFromDB,
     getAllFromDB,
+    MyCart,
     doctorOfferService,
 };

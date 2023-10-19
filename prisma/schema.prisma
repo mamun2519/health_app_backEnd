@@ -36,6 +36,7 @@ model User {
   meetingRequests MeetingRequest[]
   payments        Payment[]
   Withdraw        Withdraw[]
+  Cart            Cart[]
 
   @@map("users")
 }
@@ -76,6 +77,7 @@ model Doctor {
   prescription   Prescription[]
   meetingRequest MeetingRequest[]
   serviceOffer   ServiceOffer[]
+  Cart           Cart[]
 
   @@map("doctors")
 }
@@ -207,6 +209,7 @@ model DoctorService {
   appointments   Appointment[]
   GoogleMeet     GoogleMeet[]
   payments       Payment[]
+  Cart           Cart[]
 
   @@map("doctor_service")
 }
@@ -401,6 +404,27 @@ model Withdraw {
   user                     User?              @relation(fields: [withdrawAccptetManagerId], references: [id])
 
   @@map("withdraw")
+}
+
+model Cart {
+  id             String        @id @default(uuid())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  age            Int
+  weight         Int
+  bookingDate    String
+  slatTime       String
+  doctorId       String
+  doctor         Doctor        @relation(fields: [doctorId], references: [id])
+  serviceId      String
+  service        DoctorService @relation(fields: [serviceId], references: [id])
+  price          String
+  address        String
+  userId         String
+  patientProblem String
+  gender         String
+  bloodGroup     String
+  user           User          @relation(fields: [userId], references: [id])
 }
 
 model CompanyBalance {

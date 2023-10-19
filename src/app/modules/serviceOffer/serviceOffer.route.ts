@@ -11,6 +11,17 @@ router.post(
   ValidationRequest(ServiceOfferValidation.create),
   OfferServiceController.insetIntoDB,
 )
+router.post(
+  '/addToCart',
+  auth(USER_ROLE.DOCTOR, USER_ROLE.ADMIN, USER_ROLE.BLOODDONOR, USER_ROLE.USER),
+
+  OfferServiceController.addToCart,
+)
+router.get(
+  '/myCart',
+  auth(USER_ROLE.DOCTOR, USER_ROLE.ADMIN, USER_ROLE.BLOODDONOR, USER_ROLE.USER),
+  OfferServiceController.MyCart,
+)
 router.get(
   '/doctor-offer',
   auth(USER_ROLE.DOCTOR),
@@ -28,6 +39,11 @@ router.delete(
   '/:id',
   auth(USER_ROLE.DOCTOR),
   OfferServiceController.deleteByIdFromDB,
+)
+router.delete(
+  '/cart/:id',
+
+  OfferServiceController.singleCartDelete,
 )
 
 export const OfferServiceRoutes = router

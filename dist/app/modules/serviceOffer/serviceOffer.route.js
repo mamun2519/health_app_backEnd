@@ -12,6 +12,8 @@ const validationRequest_1 = __importDefault(require("../../middleware/validation
 const serviceOffer_validation_1 = require("./serviceOffer.validation");
 const router = express_1.default.Router();
 router.post('/', (0, auth_1.auth)(user_1.USER_ROLE.DOCTOR), (0, validationRequest_1.default)(serviceOffer_validation_1.ServiceOfferValidation.create), serviceOffer_controller_1.OfferServiceController.insetIntoDB);
+router.post('/addToCart', (0, auth_1.auth)(user_1.USER_ROLE.DOCTOR, user_1.USER_ROLE.ADMIN, user_1.USER_ROLE.BLOODDONOR), serviceOffer_controller_1.OfferServiceController.addToCart);
+router.post('/myCart', (0, auth_1.auth)(user_1.USER_ROLE.DOCTOR, user_1.USER_ROLE.ADMIN, user_1.USER_ROLE.BLOODDONOR), serviceOffer_controller_1.OfferServiceController.addToCart);
 router.get('/doctor-offer', (0, auth_1.auth)(user_1.USER_ROLE.DOCTOR), serviceOffer_controller_1.OfferServiceController.doctorOfferService);
 router.get('/', (0, auth_1.auth)(user_1.USER_ROLE.DOCTOR), serviceOffer_controller_1.OfferServiceController.getAllFromDB);
 router.get('/:id', serviceOffer_controller_1.OfferServiceController.getByIdFromDB);

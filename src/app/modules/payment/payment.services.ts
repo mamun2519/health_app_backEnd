@@ -29,7 +29,7 @@ const createPayment = async (
   })
 
   const newBalance = Number(doctor?.balance) + Number(data.price)
-
+  console.log(data)
   data.userId = authUserId
   data.price = Number(data.price)
   const result = await prisma.$transaction(async transactionClient => {
@@ -231,6 +231,11 @@ const OrderAppointment = async (
   for (let i = 0; i < payment.length; i++) {
     payment.map(async payment => {
       await createPayment(authUserId, payment)
+    })
+    await prisma.cart.deleteMany({
+      where: {
+        userId: authUserId,
+      },
     })
 
     return {
