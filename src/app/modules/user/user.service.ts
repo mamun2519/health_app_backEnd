@@ -8,13 +8,18 @@ import {
   Payment,
   Prescription,
   Prisma,
+  Profile,
   User,
   UserRole,
 } from '@prisma/client'
 import prisma from '../../../prisma/prisma'
 import Send_API_Error from '../../../error/apiError'
 import { StatusCodes } from 'http-status-codes'
-import { IUpdatedUserRequestData, IUserFilter } from './user.interface'
+import {
+  IUpdateUser,
+  IUpdatedUserRequestData,
+  IUserFilter,
+} from './user.interface'
 import { IPagination } from '../../../interface/pagination'
 import { calculatePagination } from '../../../helper/paginationHalper'
 import { IFilterResponse } from '../../../interface/userFilteResponse'
@@ -653,8 +658,67 @@ const myNotification = async (authUserId: string): Promise<Notification[]> => {
   })
   return result
 }
+
+const updateUserProfile = async (
+  authUserId: string,
+  data: IUpdateUser,
+): Promise<Profile | null> => {
+  console.log('id', authUserId)
+  console.log(data)
+  const { address, profile } = data
+  const user = await prisma.user.findUnique({
+    where: { id: authUserId },
+    include: { profile: true },
+  })
+  console.log(user)
+  if (!user) {
+    throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
+  }
+
+  const result = await prisma.$transaction(async transactionClient => {
+    const profiles = await transactionClient.profile.update({
+      where: { user_id: authUserId },
+      data: { ...profile },
+    })
+
+    console.log(profiles)
+
+    const allreadyExist = await prisma.presentAddress.findFirst({
+      where: {
+        profile_Id: user.profile?.id,
+      },
+    })
+
+    if (!allreadyExist) {
+      if (user.profile && address) {
+        await transactionClient.presentAddress.create({
+          data: {
+            profile_Id: user?.profile?.id,
+            address: address.address,
+            sub_district: address.sub_district,
+            district: address.district,
+          },
+        })
+      }
+    } else {
+      if (user?.profile && address) {
+        await transactionClient.presentAddress.update({
+          where: { profile_Id: user.profile.id },
+          data: {
+            address: address?.address,
+            sub_district: address?.sub_district,
+            district: address?.district,
+          },
+        })
+      }
+    }
+    return profiles
+  })
+  return result
+}
 export const UserService = {
   myNotification,
+  updateUserProfile,
   userProfile,
   filtersDoctorFromDB,
   getAllFromDB,

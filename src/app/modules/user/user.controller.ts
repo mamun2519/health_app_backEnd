@@ -178,6 +178,18 @@ const myNotification = catchAsync(async (req: Request, res: Response) => {
     data: result,
   })
 })
+
+const updateUserProfile = catchAsync(async (req: Request, res: Response) => {
+  const user = (req as JwtPayload).user
+
+  const result = await UserService.updateUserProfile(user.user_id, req.body)
+  sendApiResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'profile Update   Successfully',
+    data: result,
+  })
+})
 export const UserController = {
   myNotification,
   getAllUser,
@@ -194,4 +206,5 @@ export const UserController = {
   deleteUser,
   AllUserFromDb,
   AllAdminFromDB,
+  updateUserProfile,
 }

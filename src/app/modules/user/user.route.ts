@@ -3,6 +3,17 @@ import { UserController } from './user.controller'
 import { auth } from '../../middleware/auth'
 import { USER_ROLE } from '../../../enum/user'
 const router = express.Router()
+router.patch(
+  '/update',
+  auth(
+    USER_ROLE.USER,
+    USER_ROLE.BLOODDONOR,
+    USER_ROLE.DOCTOR,
+    USER_ROLE.ADMIN,
+    USER_ROLE.SUPER_ADMIN,
+  ),
+  UserController.updateUserProfile,
+)
 router.get(
   '/my-notification',
   auth(
@@ -74,6 +85,16 @@ router.get(
 router.delete('/delete-user/:id', UserController.deleteUser)
 router.get('/', UserController.getAllUser)
 router.get('/:id', UserController.getByIdFromDB)
-router.patch('/:id', UserController.updateByIdIntoDB)
+router.patch(
+  '/:id',
+  auth(
+    USER_ROLE.USER,
+    USER_ROLE.BLOODDONOR,
+    USER_ROLE.DOCTOR,
+    USER_ROLE.ADMIN,
+    USER_ROLE.SUPER_ADMIN,
+  ),
+  UserController.updateByIdIntoDB,
+)
 
 export const UserRoutes = router

@@ -26,3 +26,8 @@ export const DoctorAbleFiled = [
   'experience',
   'specialist',
 ]
+
+export type IUpdateUser = {
+  profile?: Profile
+  address?: PermanentAddress
+}
