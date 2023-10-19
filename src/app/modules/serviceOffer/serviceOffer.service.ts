@@ -164,6 +164,7 @@ const createCart = async (authUserId: string, data: Cart): Promise<Cart> => {
   if (!user) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
   }
+  console.log(user)
   data.userId = authUserId
   const result = await prisma.cart.create({ data })
 

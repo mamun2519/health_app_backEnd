@@ -6,17 +6,17 @@ import ValidationRequest from '../../middleware/validationRequest'
 import { ServiceOfferValidation } from './serviceOffer.validation'
 const router = express.Router()
 router.post(
+  '/addToCarts',
+  auth(USER_ROLE.DOCTOR, USER_ROLE.ADMIN, USER_ROLE.BLOODDONOR, USER_ROLE.USER),
+  OfferServiceController.addToCart,
+)
+router.post(
   '/',
   auth(USER_ROLE.DOCTOR),
   ValidationRequest(ServiceOfferValidation.create),
   OfferServiceController.insetIntoDB,
 )
-router.post(
-  '/addToCart',
-  auth(USER_ROLE.DOCTOR, USER_ROLE.ADMIN, USER_ROLE.BLOODDONOR, USER_ROLE.USER),
 
-  OfferServiceController.addToCart,
-)
 router.get(
   '/myCart',
   auth(USER_ROLE.DOCTOR, USER_ROLE.ADMIN, USER_ROLE.BLOODDONOR, USER_ROLE.USER),
