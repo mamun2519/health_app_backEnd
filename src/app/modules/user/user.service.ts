@@ -4,6 +4,7 @@ import {
   Doctor,
   DonorRequest,
   DonorReview,
+  Notification,
   Payment,
   Prescription,
   Prisma,
@@ -638,7 +639,22 @@ const AllAdminFromDB = async (): Promise<User[]> => {
 
   return result
 }
+
+const myNotification = async (authUserId: string): Promise<Notification[]> => {
+  // const user = await prisma.user.findFirst({ where: { id: authUserId } })
+  // if (!user) {
+  //   throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
+  // }
+  console.log(authUserId)
+  const result = await prisma.notification.findMany({
+    where: {
+      userId: authUserId,
+    },
+  })
+  return result
+}
 export const UserService = {
+  myNotification,
   userProfile,
   filtersDoctorFromDB,
   getAllFromDB,

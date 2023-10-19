@@ -4,6 +4,17 @@ import { auth } from '../../middleware/auth'
 import { USER_ROLE } from '../../../enum/user'
 const router = express.Router()
 router.get(
+  '/my-notification',
+  auth(
+    USER_ROLE.USER,
+    USER_ROLE.BLOODDONOR,
+    USER_ROLE.DOCTOR,
+    USER_ROLE.ADMIN,
+    USER_ROLE.SUPER_ADMIN,
+  ),
+  UserController.myNotification,
+)
+router.get(
   '/filterDoctor',
 
   UserController.filtersDoctorFromDB,
@@ -18,6 +29,7 @@ router.get(
 
   UserController.AllAdminFromDB,
 )
+
 router.post(
   '/request-donor',
   auth(USER_ROLE.USER, USER_ROLE.BLOODDONOR),

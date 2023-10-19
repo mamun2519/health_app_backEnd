@@ -12,6 +12,7 @@ route.post(
   ServiceReviewController.insetIntoDB,
 )
 route.get('/', auth(USER_ROLE.USER), ServiceReviewController.myReview)
+route.get('/all-review', ServiceReviewController.getAllReviewFromDb)
 route.get('/:id', ServiceReviewController.getByIdFromDB)
 route.patch(
   '/:id',
@@ -19,5 +20,5 @@ route.patch(
   ServiceReviewController.updateByIdIntoDB,
 )
 route.delete('/:id', ServiceReviewController.deleteByIdFromDB)
-
+route.get('/service/:id', ServiceReviewController.getServiceWithReview)
 export const ServiceReviewRoutes = route

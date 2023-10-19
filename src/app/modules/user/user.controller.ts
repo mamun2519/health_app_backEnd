@@ -166,7 +166,20 @@ const AllAdminFromDB = catchAsync(async (req: Request, res: Response) => {
     data: result,
   })
 })
+
+const myNotification = catchAsync(async (req: Request, res: Response) => {
+  const user = (req as JwtPayload).user
+
+  const result = await UserService.myNotification(user.user_id)
+  sendApiResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'My Notification  Fetch Successfully',
+    data: result,
+  })
+})
 export const UserController = {
+  myNotification,
   getAllUser,
   getByIdFromDB,
   updateByIdIntoDB,

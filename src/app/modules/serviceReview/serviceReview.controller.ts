@@ -61,10 +61,30 @@ const updateByIdIntoDB = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const getServiceWithReview = catchAsync(async (req: Request, res: Response) => {
+  const result = await ServiceReviewServices.getServiceWithReview(req.params.id)
+  sendApiResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Review fetch Successfully',
+    data: result,
+  })
+})
+const getAllReviewFromDb = catchAsync(async (req: Request, res: Response) => {
+  const result = await ServiceReviewServices.getAllReviewFromDb()
+  sendApiResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Review fetch Successfully',
+    data: result,
+  })
+})
 export const ServiceReviewController = {
+  getAllReviewFromDb,
   insetIntoDB,
   myReview,
   getByIdFromDB,
   deleteByIdFromDB,
   updateByIdIntoDB,
+  getServiceWithReview,
 }

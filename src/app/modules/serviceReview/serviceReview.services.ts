@@ -68,10 +68,40 @@ const deleteByIdFromDB = async (id: string): Promise<ServiceReview | null> => {
   return await prisma.serviceReview.delete({ where: { id } })
 }
 
+const getServiceWithReview = async (id: string): Promise<ServiceReview[]> => {
+  console.log('id-', id)
+  const result = await prisma.serviceReview.findMany({
+    where: { serviceId: id },
+    include: {
+      user: {
+        include: {
+          profile: true,
+        },
+      },
+    },
+  })
+  return result
+}
+
+const getAllReviewFromDb = async (): Promise<ServiceReview[]> => {
+  const result = await prisma.serviceReview.findMany({
+    include: {
+      user: {
+        include: {
+          profile: true,
+        },
+      },
+    },
+  })
+  return result
+}
+
 export const ServiceReviewServices = {
+  getServiceWithReview,
   insetIntoDB,
   myReview,
   getByIdFromDB,
   deleteByIdFromDB,
   updateByIdIntoDB,
+  getAllReviewFromDb,
 }
