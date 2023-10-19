@@ -7,7 +7,7 @@ import { ServiceReviewValidation } from './serviceReview.validaion'
 const route = express.Router()
 route.post(
   '/',
-  auth(USER_ROLE.USER),
+  auth(USER_ROLE.USER, USER_ROLE.BLOODDONOR),
   ValidationRequest(ServiceReviewValidation.create),
   ServiceReviewController.insetIntoDB,
 )
