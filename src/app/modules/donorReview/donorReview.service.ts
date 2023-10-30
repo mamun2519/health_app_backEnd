@@ -52,9 +52,18 @@ const deleteByIdFromDB = async (id: string): Promise<DonorReview | null> => {
   return await prisma.donorReview.delete({ where: { id } })
 }
 
+const SpecificReview = async (id: string): Promise<DonorReview[] | null> => {
+  return await prisma.donorReview.findMany({
+    where: {
+      donorId: id,
+    },
+  })
+}
+
 export const DonorReviewService = {
   createDonorReviewIntoDB,
   updateByIdIntoDB,
   deleteByIdFromDB,
   getByIdFromDB,
+  SpecificReview,
 }

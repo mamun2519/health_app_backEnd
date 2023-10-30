@@ -7,10 +7,11 @@ import { DonorReviewValidation } from './donorReview.validation'
 const router = express.Router()
 router.post(
   '/',
-  auth(USER_ROLE.USER, USER_ROLE.BLOODDONOR),
+  auth(USER_ROLE.USER, USER_ROLE.BLOODDONOR, USER_ROLE.DOCTOR),
   ValidationRequest(DonorReviewValidation.create),
   DonorReviewController.createDonorReviewIntoDB,
 )
+router.get('/specific/:id', DonorReviewController.getSpecificReview)
 router.get('/:id', DonorReviewController.getByIdFromDB)
 router.patch(
   '/:id',

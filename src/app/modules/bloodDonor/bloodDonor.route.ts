@@ -29,6 +29,7 @@ router.patch(
     USER_ROLE.USER,
     USER_ROLE.ADMIN,
     USER_ROLE.SUPER_ADMIN,
+    USER_ROLE.DOCTOR,
   ),
   BloodDonorController.donorRequestUpdateByIdIntoDB,
 )

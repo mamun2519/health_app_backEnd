@@ -16,6 +16,6 @@ router.get('/request/details/:id', bloodDonor_controller_1.BloodDonorController.
 router.get('/:id', bloodDonor_controller_1.BloodDonorController.getByIdFromDB);
 router.get('/', bloodDonor_controller_1.BloodDonorController.filtersBloodDonorFromDB);
 router.patch('/request', (0, auth_1.auth)(user_1.USER_ROLE.BLOODDONOR, user_1.USER_ROLE.USER), bloodDonor_controller_1.BloodDonorController.updateDonorRequestStatusByIdFromDB);
-router.patch('/update-request/:id', (0, auth_1.auth)(user_1.USER_ROLE.BLOODDONOR, user_1.USER_ROLE.USER, user_1.USER_ROLE.ADMIN, user_1.USER_ROLE.SUPER_ADMIN), bloodDonor_controller_1.BloodDonorController.donorRequestUpdateByIdIntoDB);
+router.patch('/update-request/:id', (0, auth_1.auth)(user_1.USER_ROLE.BLOODDONOR, user_1.USER_ROLE.USER, user_1.USER_ROLE.ADMIN, user_1.USER_ROLE.SUPER_ADMIN, user_1.USER_ROLE.DOCTOR), bloodDonor_controller_1.BloodDonorController.donorRequestUpdateByIdIntoDB);
 router.delete('/request/:id', (0, auth_1.auth)(user_1.USER_ROLE.BLOODDONOR, user_1.USER_ROLE.USER, user_1.USER_ROLE.ADMIN, user_1.USER_ROLE.SUPER_ADMIN), bloodDonor_controller_1.BloodDonorController.deleteDonorRequestByIdFromDB);
 exports.BloodDonorRoutes = router;

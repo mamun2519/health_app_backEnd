@@ -14,7 +14,7 @@ router.get('/my-notification', (0, auth_1.auth)(user_1.USER_ROLE.USER, user_1.US
 router.get('/filterDoctor', user_controller_1.UserController.filtersDoctorFromDB);
 router.get('/all-user', user_controller_1.UserController.AllUserFromDb);
 router.get('/all-admin', user_controller_1.UserController.AllAdminFromDB);
-router.post('/request-donor', (0, auth_1.auth)(user_1.USER_ROLE.USER, user_1.USER_ROLE.BLOODDONOR), user_controller_1.UserController.bloodDonorRequest);
+router.post('/request-donor', (0, auth_1.auth)(user_1.USER_ROLE.USER, user_1.USER_ROLE.BLOODDONOR, user_1.USER_ROLE.DOCTOR), user_controller_1.UserController.bloodDonorRequest);
 router.get('/my-donor-request', (0, auth_1.auth)(user_1.USER_ROLE.USER, user_1.USER_ROLE.BLOODDONOR, user_1.USER_ROLE.DOCTOR), user_controller_1.UserController.myDonorRequest);
 router.get('/my-donor-review', (0, auth_1.auth)(user_1.USER_ROLE.USER), user_controller_1.UserController.myDonorReviewFromDB);
 router.get('/my-appointment', (0, auth_1.auth)(user_1.USER_ROLE.USER, user_1.USER_ROLE.BLOODDONOR), user_controller_1.UserController.myAppointment);

@@ -51,9 +51,20 @@ const deleteByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const getSpecificReview = catchAsync(async (req: Request, res: Response) => {
+  const result = await DonorReviewService.SpecificReview(req.params.id)
+  sendApiResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Get Specific Review Successfully',
+    data: result,
+  })
+})
+
 export const DonorReviewController = {
   createDonorReviewIntoDB,
   updateByIdIntoDB,
   getByIdFromDB,
   deleteByIdFromDB,
+  getSpecificReview,
 }
