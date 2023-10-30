@@ -7,7 +7,7 @@ router.get('/all-donor', BloodDonorController.getAllFromDB)
 router.get('/all-request', BloodDonorController.AllDonorRequest)
 router.get(
   '/user-request',
-  auth(USER_ROLE.BLOODDONOR),
+  auth(USER_ROLE.BLOODDONOR, USER_ROLE.DOCTOR),
   BloodDonorController.userDonorRequest,
 )
 router.get(
