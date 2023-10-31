@@ -351,6 +351,14 @@ const myAppointment = async (
         },
       },
     },
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? {
+            [options.sortBy]: options.sortOrder,
+          }
+        : {
+            createdAt: 'desc',
+          },
   })
   const total = await prisma.appointment.count({
     where: {
@@ -396,6 +404,14 @@ const myPrescription = async (
         },
       },
     },
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? {
+            [options.sortBy]: options.sortOrder,
+          }
+        : {
+            createdAt: 'desc',
+          },
   })
   const total = await prisma.prescription.count({
     where: {
@@ -440,6 +456,14 @@ const myPaymentList = async (
         },
       },
     },
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? {
+            [options.sortBy]: options.sortOrder,
+          }
+        : {
+            createdAt: 'desc',
+          },
   })
   const total = await prisma.payment.count({
     where: {

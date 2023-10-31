@@ -45,7 +45,7 @@ const insetIntoDB = async (
       include: { service: true },
     })
 
-    const message = `${user.profile?.user_name} a appointment in your service. Appointment date ${data.bookingDate}`
+    const message = `${user.profile?.first_name} a appointment in your service. Appointment date ${data.bookingDate}`
 
     await transactionClient.doctor.update({
       where: {

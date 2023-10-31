@@ -3,7 +3,7 @@ import { auth } from '../../middleware/auth'
 import { USER_ROLE } from '../../../enum/user'
 import { PaymentController } from './payment.controller'
 const route = express.Router()
-route.get('/stripe', PaymentController.paymentByStripe)
+route.get('/stripe/:price', PaymentController.paymentByStripe)
 route.delete(
   '/:id',
 

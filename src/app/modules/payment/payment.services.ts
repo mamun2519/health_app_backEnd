@@ -218,8 +218,8 @@ const createCompanyBalance = async (
 }
 
 const OrderAppointment = async (
-  appointment: Appointment[],
-  payment: Payment[],
+  appointment: Appointment,
+  payment: Payment,
   authUserId: string,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> => {
@@ -227,38 +227,27 @@ const OrderAppointment = async (
   if (!user) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
   }
+  await AppointmentService.insetIntoDB(appointment, authUserId)
 
-  for (let i = 0; i < appointment?.length; i++) {
-    appointment.map(async singleAppointment => {
-      await AppointmentService.insetIntoDB(singleAppointment, authUserId)
-    })
-  }
-  for (let i = 0; i < payment.length; i++) {
-    payment.map(async payment => {
-      await createPayment(authUserId, payment)
-    })
-    await prisma.cart.deleteMany({
-      where: {
-        userId: authUserId,
-      },
-    })
+  await createPayment(authUserId, payment)
 
-    return {
-      message: 'Success',
-    }
+  return {
+    message: 'Success',
   }
 }
 
-const paymentByStripe = async () => {
+const paymentByStripe = async (price: string) => {
   // Create a PaymentIntent with the order amount and currency
+  console.log('price', price)
   const paymentIntent = await stripe.paymentIntents.create({
-    amount: 140,
+    amount: Number(price),
     currency: 'usd',
-    // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
+
     automatic_payment_methods: {
       enabled: true,
     },
   })
+  console.log(paymentIntent)
 
   return {
     clientSecret: paymentIntent.client_secret,

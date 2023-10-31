@@ -84,7 +84,9 @@ const OrderAppointment = catchAsync(async (req: Request, res: Response) => {
 })
 
 const paymentByStripe = catchAsync(async (req: Request, res: Response) => {
-  const result = await PaymentService.paymentByStripe()
+  const result = await PaymentService.paymentByStripe(
+    req.params.price as string,
+  )
   sendApiResponse(res, {
     success: true,
     message: 'Payment Link Send Successfully',
