@@ -57,6 +57,13 @@ const SpecificReview = async (id: string): Promise<DonorReview[] | null> => {
     where: {
       donorId: id,
     },
+    include: {
+      user: {
+        include: {
+          profile: true,
+        },
+      },
+    },
   })
 }
 

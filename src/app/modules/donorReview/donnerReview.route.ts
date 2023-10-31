@@ -5,13 +5,13 @@ import { USER_ROLE } from '../../../enum/user'
 import ValidationRequest from '../../middleware/validationRequest'
 import { DonorReviewValidation } from './donorReview.validation'
 const router = express.Router()
+router.get('/specific/:id', DonorReviewController.getSpecificReview)
 router.post(
   '/',
   auth(USER_ROLE.USER, USER_ROLE.BLOODDONOR, USER_ROLE.DOCTOR),
   ValidationRequest(DonorReviewValidation.create),
   DonorReviewController.createDonorReviewIntoDB,
 )
-router.get('/specific/:id', DonorReviewController.getSpecificReview)
 router.get('/:id', DonorReviewController.getByIdFromDB)
 router.patch(
   '/:id',

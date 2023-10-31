@@ -56,9 +56,24 @@ const getByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
 const deleteByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return yield prisma_1.default.donorReview.delete({ where: { id } });
 });
+const SpecificReview = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield prisma_1.default.donorReview.findMany({
+        where: {
+            donorId: id,
+        },
+        include: {
+            user: {
+                include: {
+                    profile: true,
+                },
+            },
+        },
+    });
+});
 exports.DonorReviewService = {
     createDonorReviewIntoDB,
     updateByIdIntoDB,
     deleteByIdFromDB,
     getByIdFromDB,
+    SpecificReview,
 };

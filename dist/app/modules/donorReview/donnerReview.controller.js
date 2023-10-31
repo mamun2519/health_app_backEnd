@@ -55,9 +55,19 @@ const deleteByIdFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 
         data: result,
     });
 }));
+const getSpecificReview = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield donorReview_service_1.DonorReviewService.SpecificReview(req.params.id);
+    (0, APIResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: 'Get Specific Review Successfully',
+        data: result,
+    });
+}));
 exports.DonorReviewController = {
     createDonorReviewIntoDB,
     updateByIdIntoDB,
     getByIdFromDB,
     deleteByIdFromDB,
+    getSpecificReview,
 };

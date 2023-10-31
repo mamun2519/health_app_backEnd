@@ -8,6 +8,11 @@ import { calculatePagination } from '../../../helper/paginationHalper'
 import { PaymentSearchAbleFiled } from './payment.constant'
 import { IFilterResponse } from '../../../interface/userFilteResponse'
 import { AppointmentService } from '../appointment/appointment.services'
+import Stripe from 'stripe'
+
+const stripe = new Stripe(
+  'sk_test_51L1nmNCGpaTt0RU81oq26j6Ta7gwb9pGlOOwxjeXAQgefsXMvmRxFUopKE2St6GDbDpxjUug0KxRyqzL6oKarPcR00lqLjh70r',
+)
 
 const createPayment = async (
   authUserId: string,
@@ -243,6 +248,23 @@ const OrderAppointment = async (
     }
   }
 }
+
+const paymentByStripe = async () => {
+  // Create a PaymentIntent with the order amount and currency
+  const paymentIntent = await stripe.paymentIntents.create({
+    amount: 140,
+    currency: 'usd',
+    // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  })
+
+  return {
+    clientSecret: paymentIntent.client_secret,
+  }
+}
+
 export const PaymentService = {
   OrderAppointment,
   createPayment,
@@ -251,4 +273,5 @@ export const PaymentService = {
   updateByIdIntoDB,
   deleteByIdFromDB,
   createCompanyBalance,
+  paymentByStripe,
 }

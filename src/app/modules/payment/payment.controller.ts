@@ -83,6 +83,16 @@ const OrderAppointment = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const paymentByStripe = catchAsync(async (req: Request, res: Response) => {
+  const result = await PaymentService.paymentByStripe()
+  sendApiResponse(res, {
+    success: true,
+    message: 'Payment Link Send Successfully',
+    statusCode: StatusCodes.OK,
+    data: result,
+  })
+})
+
 export const PaymentController = {
   createPayment,
   getAllFromDB,
@@ -91,4 +101,5 @@ export const PaymentController = {
   deleteByIdFromDB,
   OrderAppointment,
   createCompanyBalance,
+  paymentByStripe,
 }
