@@ -5,16 +5,8 @@ import { WithdrawController } from './withdraw.controller'
 import ValidationRequest from '../../middleware/validationRequest'
 import { withdrawValidation } from './withdraw.validaiton'
 const router = express.Router()
-
 router.post(
-  '/',
-  auth(USER_ROLE.DOCTOR),
-  ValidationRequest(withdrawValidation.create),
-  WithdrawController.doctorWithDrawRequest,
-)
-
-router.post(
-  '/accepted/:id',
+  '/accepted',
   auth(
     USER_ROLE.DOCTOR,
     USER_ROLE.USER,
@@ -23,6 +15,13 @@ router.post(
   ),
   WithdrawController.withdrawAccepted,
 )
+router.post(
+  '/',
+  auth(USER_ROLE.DOCTOR),
+  ValidationRequest(withdrawValidation.create),
+  WithdrawController.doctorWithDrawRequest,
+)
+
 router.delete('/:id', WithdrawController.deleteByIdFromDB)
 router.get(
   '/:id',

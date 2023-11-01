@@ -158,9 +158,12 @@ const deleteByIdFromDB = async (id: string): Promise<Withdraw | null> => {
 
 const withdrawAccepted = async (
   authUserId: string,
-  id: string,
-  status: WithdrawEnumStatus,
+  data: {
+    id: string
+    status: WithdrawEnumStatus
+  },
 ): Promise<Withdraw> => {
+  console.log('data', data)
   const user = await prisma.user.findFirst({
     where: {
       id: authUserId,
@@ -175,7 +178,7 @@ const withdrawAccepted = async (
 
   const doctor = await prisma.withdraw.findFirst({
     where: {
-      id,
+      id: data.id,
     },
     include: {
       doctor: {
@@ -186,10 +189,10 @@ const withdrawAccepted = async (
     },
   })
   const companyBalance = await prisma.companyBalance.findMany({})
-  if (status === 'Complete') {
+  if (data.status === 'Complete') {
     const result = await prisma.$transaction(async transactionClient => {
       const completeWithdraw = await transactionClient.withdraw.update({
-        where: { id },
+        where: { id: data.id },
         data: {
           status: WithdrawEnumStatus.Complete,
           withdrawAccptetManagerId: user?.id,
@@ -233,7 +236,7 @@ const withdrawAccepted = async (
     return result
   } else {
     const completeWithdraw = await prisma.withdraw.update({
-      where: { id },
+      where: { id: data.id },
       data: {
         status: WithdrawEnumStatus.Cancel,
         withdrawAccptetManagerId: user?.id,

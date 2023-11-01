@@ -555,7 +555,7 @@ const userProfile = async (user: {
   role: string
   user_id: string
 }): Promise<User | BloodDonor | Doctor | null> => {
-  console.log(user)
+  console.log(user.role)
   if (user.role === UserRole.User) {
     return await prisma.user.findFirst({
       where: {
