@@ -81,7 +81,15 @@ const getAllFromDB = async (
           profile: true,
         },
       },
-      doctor: true,
+      doctor: {
+        include: {
+          user: {
+            include: {
+              profile: true,
+            },
+          },
+        },
+      },
     },
     orderBy:
       options.sortBy && options.sortOrder
@@ -151,6 +159,7 @@ const deleteByIdFromDB = async (id: string): Promise<Withdraw | null> => {
 const withdrawAccepted = async (
   authUserId: string,
   id: string,
+  status: WithdrawEnumStatus,
 ): Promise<Withdraw> => {
   const user = await prisma.user.findFirst({
     where: {
@@ -177,41 +186,61 @@ const withdrawAccepted = async (
     },
   })
   const companyBalance = await prisma.companyBalance.findMany({})
+  if (status === 'Complete') {
+    const result = await prisma.$transaction(async transactionClient => {
+      const completeWithdraw = await transactionClient.withdraw.update({
+        where: { id },
+        data: {
+          status: WithdrawEnumStatus.Complete,
+          withdrawAccptetManagerId: user?.id,
+        },
+      })
 
-  const result = await prisma.$transaction(async transactionClient => {
-    const completeWithdraw = await transactionClient.withdraw.update({
+      const doctorTotalBalance =
+        Number(doctor?.doctor?.balance) - Number(doctor?.amount)
+      await transactionClient.doctor.update({
+        where: {
+          id: doctor?.doctor?.id,
+        },
+        data: {
+          balance: doctorTotalBalance,
+        },
+      })
+
+      const companyFinalBalance =
+        companyBalance[0]?.balance + Number(doctor?.companyEarn)
+
+      await transactionClient.companyBalance.update({
+        where: {
+          id: companyBalance[0]?.id,
+        },
+        data: {
+          balance: companyFinalBalance,
+        },
+      })
+
+      const message = `Accepted your withdraw request. withdraw balance ${doctor?.amount} BDT. 20% company Earn ${doctor?.companyEarn}, final withdraw ${doctor?.finalAmonut}`
+      await transactionClient.notification.create({
+        data: {
+          userId: doctor?.doctor.user_id as string,
+          message,
+        },
+      })
+
+      return completeWithdraw
+    })
+
+    return result
+  } else {
+    const completeWithdraw = await prisma.withdraw.update({
       where: { id },
       data: {
-        status: WithdrawEnumStatus.Complete,
+        status: WithdrawEnumStatus.Cancel,
         withdrawAccptetManagerId: user?.id,
       },
     })
-
-    const doctorTotalBalance =
-      Number(doctor?.doctor?.balance) - Number(doctor?.amount)
-    await transactionClient.doctor.update({
-      where: {
-        id: doctor?.doctor?.id,
-      },
-      data: {
-        balance: doctorTotalBalance,
-      },
-    })
-
-    const companyFinalBalance =
-      companyBalance[0]?.balance + Number(doctor?.companyEarn)
-
-    await transactionClient.companyBalance.update({
-      where: {
-        id: companyBalance[0]?.id,
-      },
-      data: {
-        balance: companyFinalBalance,
-      },
-    })
-
-    const message = `Accepted your withdraw request. withdraw balance ${doctor?.amount} BDT. 20% companyEarn ${doctor?.companyEarn}, final withdraw ${doctor?.finalAmonut}`
-    await transactionClient.notification.create({
+    const message = `Your Withdraw Request Cancel`
+    await prisma.notification.create({
       data: {
         userId: doctor?.doctor.user_id as string,
         message,
@@ -219,9 +248,7 @@ const withdrawAccepted = async (
     })
 
     return completeWithdraw
-  })
-
-  return result
+  }
 }
 
 export const WithdrawServices = {

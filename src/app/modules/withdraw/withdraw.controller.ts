@@ -29,6 +29,7 @@ const withdrawAccepted = catchAsync(async (req: Request, res: Response) => {
   const result = await WithdrawServices.withdrawAccepted(
     user.user_id,
     req.params.id,
+    req.body.status,
   )
   sendApiResponse(res, {
     statusCode: StatusCodes.OK,
