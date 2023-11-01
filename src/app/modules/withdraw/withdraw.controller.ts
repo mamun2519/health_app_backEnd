@@ -60,7 +60,7 @@ const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
   })
 })
 const deleteByIdFromDB = catchAsync(async (req: Request, res: Response) => {
-  const result = await WithdrawServices.getByIdFromDB(req.params.id)
+  const result = await WithdrawServices.deleteByIdFromDB(req.params.id)
   sendApiResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,

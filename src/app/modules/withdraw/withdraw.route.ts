@@ -15,9 +15,15 @@ router.post(
 
 router.post(
   '/accepted/:id',
-  auth(USER_ROLE.DOCTOR, USER_ROLE.USER),
+  auth(
+    USER_ROLE.DOCTOR,
+    USER_ROLE.USER,
+    USER_ROLE.ADMIN,
+    USER_ROLE.SUPER_ADMIN,
+  ),
   WithdrawController.withdrawAccepted,
 )
+router.delete('/:id', WithdrawController.deleteByIdFromDB)
 router.get(
   '/:id',
 
@@ -28,7 +34,6 @@ router.patch(
   ValidationRequest(withdrawValidation.create),
   WithdrawController.updateByIdIntoDB,
 )
-router.delete('/:id', WithdrawController.deleteByIdFromDB)
 router.get(
   '/',
 

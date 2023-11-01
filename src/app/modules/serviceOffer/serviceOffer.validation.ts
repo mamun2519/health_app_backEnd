@@ -9,7 +9,7 @@ const create = z.object({
     offerTitle: z.string({
       required_error: 'offerTitle Is Required',
     }),
-    promoCode: z.number({
+    promoCode: z.string({
       required_error: 'promoCode Is Required',
     }),
     discount: z.number({

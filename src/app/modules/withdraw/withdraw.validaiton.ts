@@ -12,7 +12,7 @@ const create = z.object({
       required_error: 'number Is Required',
     }),
     bankName: z.number().optional(),
-    withdrawAccptetManagerId: z.string(),
+    // withdrawAccptetManagerId: z.string(),
   }),
 })
 

@@ -12,6 +12,7 @@ const insetIntoDB = async (
   data: ServiceOffer,
   authUserId: string,
 ): Promise<ServiceOffer> => {
+  console.log(data)
   const user = await prisma.user.findFirst({
     where: {
       id: authUserId,
@@ -24,6 +25,15 @@ const insetIntoDB = async (
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'Doctor Not found')
   }
   data.doctorId = user.doctor?.id as string
+  const allReadyOfferExist = await prisma.serviceOffer.findFirst({
+    where: {
+      serviceId: data.serviceId,
+      status: 'Active',
+    },
+  })
+  if (allReadyOfferExist) {
+    throw new Send_API_Error(StatusCodes.BAD_REQUEST, 'Already offer Active')
+  }
   return await prisma.serviceOffer.create({ data })
 }
 
@@ -103,6 +113,9 @@ const updateByIdIntoDB = async (
 const getByIdFromDB = async (id: string): Promise<ServiceOffer | null> => {
   return await prisma.serviceOffer.findFirst({
     where: { id },
+    include: {
+      service: true,
+    },
   })
 }
 const doctorOfferService = async (

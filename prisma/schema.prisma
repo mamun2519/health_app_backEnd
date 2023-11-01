@@ -230,8 +230,8 @@ model ServiceSalt {
 
 model ServiceOffer {
   id         String                   @id @default(uuid())
-  serviceId  String?                  @unique
-  service    DoctorService?           @relation(fields: [serviceId], references: [id])
+  serviceId  String
+  service    DoctorService            @relation(fields: [serviceId], references: [id])
   offerTitle String
   promoCode  String
   discount   Int

@@ -134,6 +134,7 @@ const updateByIdIntoDB = async (
   })
 }
 const deleteByIdFromDB = async (id: string): Promise<Withdraw | null> => {
+  console.log(id)
   return await prisma.withdraw.delete({
     where: { id },
     include: {
