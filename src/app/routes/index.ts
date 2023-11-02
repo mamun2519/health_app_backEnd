@@ -14,6 +14,7 @@ import { GoogleMeetRoutes } from '../modules/googleMeet/googleMeet.route'
 import { MeetingRequestRoutes } from '../modules/meetRequest/meetRequest.route'
 import { PaymentRoute } from '../modules/payment/payment.route'
 import { WithdrawRoutes } from '../modules/withdraw/withdraw.route'
+import { NotificationRoutes } from '../modules/notification/route'
 const router = express.Router()
 
 const allModulesRoutes = [
@@ -76,6 +77,10 @@ const allModulesRoutes = [
   {
     path: '/withdraw',
     route: WithdrawRoutes,
+  },
+  {
+    path: '/notification',
+    route: NotificationRoutes,
   },
 ]
 

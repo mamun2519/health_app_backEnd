@@ -674,10 +674,13 @@ const myNotification = async (authUserId: string): Promise<Notification[]> => {
   // if (!user) {
   //   throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
   // }
-  console.log(authUserId)
+
   const result = await prisma.notification.findMany({
     where: {
       userId: authUserId,
+    },
+    orderBy: {
+      createdAt: 'desc',
     },
   })
   return result
