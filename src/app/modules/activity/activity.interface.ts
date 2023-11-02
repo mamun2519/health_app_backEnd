@@ -7,3 +7,14 @@ export type IUserActivity = {
     schedule: string
   }
 }
+
+export type IDonorActivity = {
+  bookingAppointment: number
+  donorRequest: number
+  completeDonation: number
+  pendingRequest: number
+  schedule: {
+    date: string
+    schedule: string
+  }
+}
