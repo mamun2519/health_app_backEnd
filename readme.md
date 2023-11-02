@@ -1,7 +1,7 @@
 # Blood Donor & Doctor Service App
 
-Live Link https://healtappfront.vercel.app/
-Front-end Repository Link:https://github.com/mamun2519/health_app_frontend
+- Live Link https://healtappfront.vercel.app/
+- Front-end Repository Link:https://github.com/mamun2519/health_app_frontend
 
 # SDLC (Software development Life Cycle)
 
@@ -177,8 +177,7 @@ Grap/ Chart
 - user_id (reference to user model)
 - avater
 - phone
-- present_address
-  -
+- ## present_address
   - sub_district
   - police_station (optional)
   - address
@@ -448,9 +447,7 @@ S**hare post**
 
 **Social Media**
 
--
-
-**Post**
+- **Post**
 
 - URL/post/create/:id (post)
 - URL/Post/my-post/:id (Get)
