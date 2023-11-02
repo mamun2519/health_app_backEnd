@@ -15,6 +15,7 @@ import { MeetingRequestRoutes } from '../modules/meetRequest/meetRequest.route'
 import { PaymentRoute } from '../modules/payment/payment.route'
 import { WithdrawRoutes } from '../modules/withdraw/withdraw.route'
 import { NotificationRoutes } from '../modules/notification/route'
+import { ActivityRoutes } from '../modules/activity/activity.route'
 const router = express.Router()
 
 const allModulesRoutes = [
@@ -81,6 +82,10 @@ const allModulesRoutes = [
   {
     path: '/notification',
     route: NotificationRoutes,
+  },
+  {
+    path: '/activity',
+    route: ActivityRoutes,
   },
 ]
 
