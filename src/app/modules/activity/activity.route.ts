@@ -12,5 +12,10 @@ router.get(
 )
 
 router.get('/doctor', auth(USER_ROLE.DOCTOR), ActivityController.doctorActivity)
+router.get(
+  '/admin',
+  auth(USER_ROLE.ADMIN, USER_ROLE.SUPER_ADMIN),
+  ActivityController.adminActivity,
+)
 
 export const ActivityRoutes = router

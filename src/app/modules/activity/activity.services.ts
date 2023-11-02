@@ -13,6 +13,9 @@ const userActivity = async (id: string): Promise<IUserActivity> => {
     where: {
       id,
     },
+    include: {
+      profile: true,
+    },
   })
   if (!user) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
@@ -55,6 +58,7 @@ const userActivity = async (id: string): Promise<IUserActivity> => {
     donorRequest,
     completeDonation,
     schedule,
+    name: `${user.profile?.first_name}  ${user.profile?.last_name} `,
   }
 }
 
@@ -65,6 +69,7 @@ const donorActivity = async (id: string): Promise<IDonorActivity> => {
     },
     include: {
       bloodDonor: true,
+      profile: true,
     },
   })
   if (!user) {
@@ -117,6 +122,7 @@ const donorActivity = async (id: string): Promise<IDonorActivity> => {
     completeDonation,
     schedule,
     pendingRequest,
+    name: `${user.profile?.first_name}  ${user.profile?.last_name} `,
   }
 }
 
@@ -128,6 +134,7 @@ const doctorActivity = async (id: string): Promise<IDoctorActivity> => {
     include: {
       // bloodDonor: true,
       doctor: true,
+      profile: true,
     },
   })
   if (!user) {
@@ -172,6 +179,7 @@ const doctorActivity = async (id: string): Promise<IDoctorActivity> => {
     completeDonation,
     donorRequest,
     pendingWithdraw,
+    name: `${user.profile?.first_name}  ${user.profile?.last_name} `,
   }
 }
 
@@ -183,6 +191,7 @@ const adminActivity = async (id: string): Promise<IAdminActivity> => {
     include: {
       // bloodDonor: true,
       doctor: true,
+      profile: true,
     },
   })
   if (!user) {
@@ -220,11 +229,12 @@ const adminActivity = async (id: string): Promise<IAdminActivity> => {
     appointment: appointment,
     service,
     balance: Number(balance[0].balance),
-    patient: Number(user?.doctor?.total_patient),
+
     completeDonation,
     pendingWithdraw,
     doctor,
     bloodDonor,
+    name: `${user.profile?.first_name}  ${user.profile?.last_name} `,
   }
 }
 

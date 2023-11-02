@@ -38,8 +38,20 @@ const doctorActivity = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const adminActivity = catchAsync(async (req: Request, res: Response) => {
+  const user = (req as JwtPayload).user
+  const result = await ActivityService.adminActivity(user.user_id)
+  sendApiResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: 'Admin Activity  successfully',
+    data: result,
+  })
+})
+
 export const ActivityController = {
   userActivity,
   donorActivity,
   doctorActivity,
+  adminActivity,
 }

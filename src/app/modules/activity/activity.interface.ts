@@ -6,6 +6,7 @@ export type IUserActivity = {
     date: string
     schedule: string
   }
+  name: string
 }
 
 export type IDonorActivity = {
@@ -17,6 +18,7 @@ export type IDonorActivity = {
     date: string
     schedule: string
   }
+  name: string
 }
 
 export type IDoctorActivity = {
@@ -27,6 +29,7 @@ export type IDoctorActivity = {
   balance: number
   patient: number
   pendingWithdraw: number
+  name: string
 }
 
 export type IAdminActivity = {
@@ -34,8 +37,9 @@ export type IAdminActivity = {
   service: number
   completeDonation: number
   balance: number
-  patient: number
+
   pendingWithdraw: number
   bloodDonor: number
   doctor: number
+  name: string
 }
