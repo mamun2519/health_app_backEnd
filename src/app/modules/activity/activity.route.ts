@@ -11,4 +11,6 @@ router.get(
   ActivityController.donorActivity,
 )
 
+router.get('/doctor', auth(USER_ROLE.DOCTOR), ActivityController.doctorActivity)
+
 export const ActivityRoutes = router
