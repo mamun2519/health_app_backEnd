@@ -12,50 +12,54 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.HaltReportController = void 0;
+exports.ActivityController = void 0;
 const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
 const APIResponse_1 = __importDefault(require("../../../shared/APIResponse"));
 const http_status_codes_1 = require("http-status-codes");
-const haltReport_services_route_1 = require("./haltReport.services.route");
-const insetIntoDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield haltReport_services_route_1.HaltReportServices.insetIntoDB(req.body);
+const activity_services_1 = require("./activity.services");
+const userActivity = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = req.user;
+    const result = yield activity_services_1.ActivityService.userActivity(user.user_id);
     (0, APIResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
-        message: 'HaltReport Added Successfully',
+        message: 'User Activity  successfully',
         data: result,
     });
 }));
-const getByIdFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield haltReport_services_route_1.HaltReportServices.getByIdFromDB(req.params.id);
+const donorActivity = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = req.user;
+    const result = yield activity_services_1.ActivityService.donorActivity(user.user_id);
     (0, APIResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
-        message: 'HaltReport fetched Successfully',
+        message: 'Donor Activity  successfully',
         data: result,
     });
 }));
-const deleteByIdFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield haltReport_services_route_1.HaltReportServices.deleteByIdFromDB(req.params.id);
+const doctorActivity = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = req.user;
+    const result = yield activity_services_1.ActivityService.doctorActivity(user.user_id);
     (0, APIResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
-        message: 'HaltReport deleted Successfully',
+        message: 'Doctor Activity  successfully',
         data: result,
     });
 }));
-const updateByIdIntoDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield haltReport_services_route_1.HaltReportServices.updateByIdIntoDB(req.params.id, req.body);
+const adminActivity = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = req.user;
+    const result = yield activity_services_1.ActivityService.adminActivity(user.user_id);
     (0, APIResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
-        message: 'HaltReport updated Successfully',
+        message: 'Admin Activity  successfully',
         data: result,
     });
 }));
-exports.HaltReportController = {
-    insetIntoDB,
-    getByIdFromDB,
-    deleteByIdFromDB,
-    updateByIdIntoDB,
+exports.ActivityController = {
+    userActivity,
+    donorActivity,
+    doctorActivity,
+    adminActivity,
 };

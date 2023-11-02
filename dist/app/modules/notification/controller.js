@@ -12,24 +12,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MedicineServices = void 0;
-const prisma_1 = __importDefault(require("../../../prisma/prisma"));
-const insetIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.medicine.create({ data });
-    return result;
-});
-const getByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield prisma_1.default.medicine.findFirst({ where: { id } });
-});
-const updateByIdIntoDB = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield prisma_1.default.medicine.update({ where: { id }, data });
-});
-const deleteByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield prisma_1.default.medicine.delete({ where: { id } });
-});
-exports.MedicineServices = {
-    insetIntoDB,
-    getByIdFromDB,
+exports.NotificationController = void 0;
+const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
+const APIResponse_1 = __importDefault(require("../../../shared/APIResponse"));
+const http_status_codes_1 = require("http-status-codes");
+const services_1 = require("./services");
+const deleteByIdFromDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield services_1.NotificationService.deleteByIdFromDB(req.params.id);
+    (0, APIResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: 'Notification deleted successfully',
+        data: result,
+    });
+}));
+exports.NotificationController = {
     deleteByIdFromDB,
-    updateByIdIntoDB,
 };

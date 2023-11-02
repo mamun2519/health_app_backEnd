@@ -12,24 +12,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MedicineServices = void 0;
+exports.NotificationService = void 0;
 const prisma_1 = __importDefault(require("../../../prisma/prisma"));
-const insetIntoDB = (data) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.medicine.create({ data });
-    return result;
-});
-const getByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield prisma_1.default.medicine.findFirst({ where: { id } });
-});
-const updateByIdIntoDB = (id, data) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield prisma_1.default.medicine.update({ where: { id }, data });
-});
 const deleteByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield prisma_1.default.medicine.delete({ where: { id } });
+    console.log(id);
+    return yield prisma_1.default.notification.delete({
+        where: { id },
+    });
 });
-exports.MedicineServices = {
-    insetIntoDB,
-    getByIdFromDB,
+exports.NotificationService = {
     deleteByIdFromDB,
-    updateByIdIntoDB,
 };
