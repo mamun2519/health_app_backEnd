@@ -678,14 +678,13 @@ const allDoctorFromDB = async (
       },
       profile: true,
     },
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? {
-            [options.sortBy]: options.sortOrder,
-          }
-        : {
-            createdAt: 'desc',
-          },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
 
   return {

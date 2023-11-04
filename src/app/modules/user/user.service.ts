@@ -624,8 +624,11 @@ const userProfile = async (user: {
 const deleteUser = async (id: string): Promise<User | null> => {
   return prisma.user.delete({ where: { id } })
 }
-const AllUserFromDb = async (): Promise<User[]> => {
+const AllUserFromDb = async (options: IPagination): Promise<User[]> => {
+  const { limit, skip } = calculatePagination(options)
   const result = await prisma.user.findMany({
+    skip,
+    take: limit,
     where: {
       role: UserRole.User,
     },
@@ -640,12 +643,23 @@ const AllUserFromDb = async (): Promise<User[]> => {
       },
       profile: true,
     },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
 
   return result
 }
-const AllAdminFromDB = async (): Promise<User[]> => {
+const AllAdminFromDB = async (options: IPagination): Promise<User[]> => {
+  console.log(options)
+  const { limit, skip } = calculatePagination(options)
   const result = await prisma.user.findMany({
+    skip,
+    take: limit,
     where: {
       role: UserRole.Admin,
     },
@@ -660,6 +674,13 @@ const AllAdminFromDB = async (): Promise<User[]> => {
       },
       profile: true,
     },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
 
   return result

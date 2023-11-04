@@ -149,7 +149,8 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
   })
 })
 const AllUserFromDb = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserService.AllUserFromDb()
+  const options = receiveArrayAndReturnObject(req.query, paginationFiled)
+  const result = await UserService.AllUserFromDb(options)
   sendApiResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
@@ -158,7 +159,8 @@ const AllUserFromDb = catchAsync(async (req: Request, res: Response) => {
   })
 })
 const AllAdminFromDB = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserService.AllAdminFromDB()
+  const options = receiveArrayAndReturnObject(req.query, paginationFiled)
+  const result = await UserService.AllAdminFromDB(options)
   sendApiResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
