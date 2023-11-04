@@ -240,7 +240,7 @@ const myDonorRequest = async (
   pagination: IPagination,
 ): Promise<IFilterResponse<DonorRequest[]>> => {
   const { limit, skip, page } = calculatePagination(pagination)
-  console.log(pagination)
+
   const result = await prisma.donorRequest.findMany({
     skip,
     take: limit,
@@ -263,14 +263,9 @@ const myDonorRequest = async (
         },
       },
     },
-    // orderBy:
-    //   pagination.sortBy && pagination.sortOrder
-    //     ? {
-    //         [pagination.sortBy]: pagination.sortOrder,
-    //       }
-    //     : {
-    //       user: "dsce"
-    //     },
+    // orderBy: pagination?.sortBy && {
+    //   [pagination.sortBy]: 'asc',
+    // },
   })
   const total = await prisma.donorRequest.count({
     where: {
@@ -351,14 +346,13 @@ const myAppointment = async (
         },
       },
     },
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? {
-            [options.sortBy]: options.sortOrder,
-          }
-        : {
-            createdAt: 'desc',
-          },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
   const total = await prisma.appointment.count({
     where: {
@@ -404,14 +398,13 @@ const myPrescription = async (
         },
       },
     },
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? {
-            [options.sortBy]: options.sortOrder,
-          }
-        : {
-            createdAt: 'desc',
-          },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
   const total = await prisma.prescription.count({
     where: {
@@ -456,14 +449,13 @@ const myPaymentList = async (
         },
       },
     },
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? {
-            [options.sortBy]: options.sortOrder,
-          }
-        : {
-            createdAt: 'desc',
-          },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
   const total = await prisma.payment.count({
     where: {

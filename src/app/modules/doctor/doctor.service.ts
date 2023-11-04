@@ -162,14 +162,13 @@ const myServiceFromDB = async (
       serviceSalt: true,
       doctor: true,
     },
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? {
-            [options.sortBy]: options.sortOrder,
-          }
-        : {
-            createdAt: 'desc',
-          },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
   if (result.length == 0) {
     throw new Send_API_Error(StatusCodes.BAD_REQUEST, 'Your service not found')
@@ -375,14 +374,13 @@ const myBookingAppointment = async (
       },
       service: true,
     },
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? {
-            [options.sortBy]: options.sortOrder,
-          }
-        : {
-            createdAt: 'desc',
-          },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
   const total = await prisma.appointment.count({
     where: { doctorId: findDoctor?.doctor?.id },
@@ -821,14 +819,13 @@ const myPrescription = async (
       healtReports: true,
     },
 
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? {
-            [options.sortBy]: options.sortOrder,
-          }
-        : {
-            createdAt: 'desc',
-          },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
 
   const total = await prisma.prescription.count({
