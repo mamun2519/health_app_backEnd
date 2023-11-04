@@ -1,12 +1,14 @@
-export const ServiceOfferFilterAbleFiled = [
+export const PrescriptionFilterAbleFiled = [
   'searchTerm',
-  'offerTitle',
-  'promoCode',
-  'expireDate',
+  'title',
+  'submitDate',
+  'advice',
+  'status',
 ]
 
-export const ServiceOfferSearchAbleFiled = [
-  'offerTitle',
-  'promoCode',
-  'expireDate',
+export const PrescriptionSearchAbleFiled = [
+  'title',
+  'submitDate',
+  'advice',
+  'status',
 ]

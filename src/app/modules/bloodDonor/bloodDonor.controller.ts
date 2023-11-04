@@ -81,9 +81,12 @@ const userDonorRequest = catchAsync(async (req: Request, res: Response) => {
 })
 const AllDonorRequest = catchAsync(async (req: Request, res: Response) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-
+  const filersData = receiveArrayAndReturnObject(
+    req.query,
+    bloodDonorFilterAbleFiled,
+  )
   const pagination = receiveArrayAndReturnObject(req.query, paginationFiled)
-  const result = await BloodDonorService.AllDonorRequest(pagination)
+  const result = await BloodDonorService.AllDonorRequest(filersData, pagination)
 
   sendApiResponse(res, {
     statusCode: StatusCodes.OK,

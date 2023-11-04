@@ -107,14 +107,13 @@ const getAllFromDB = async (
       },
       bloodDonor: true,
     },
-    orderBy:
-      pagination.sortBy && pagination.sortOrder
-        ? {
-            [pagination.sortBy]: pagination.sortOrder,
-          }
-        : {
-            createdAt: 'desc',
-          },
+    orderBy: pagination.sortBy
+      ? {
+          [pagination.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
 
   const total = await prisma.user.count({
@@ -203,13 +202,39 @@ const userDonorRequest = async (
   }
 }
 const AllDonorRequest = async (
+  filters: IFiltersUserDonorRequest,
   pagination: IPagination,
 ): Promise<IFilterResponse<DonorRequest[]>> => {
   const { page, skip, limit } = calculatePagination(pagination)
+  const { searchTerm, ...filterData } = filters
+  console.log(searchTerm)
+  const andConditions = []
+  if (searchTerm) {
+    andConditions.push({
+      OR: bloodDonorSearchAbleFiled.map(filed => ({
+        [filed]: {
+          contains: searchTerm,
+          mode: 'insensitive',
+        },
+      })),
+    })
+  }
+  if (Object.keys(filterData).length > 0) {
+    andConditions.push({
+      AND: Object.keys(filterData).map(key => ({
+        [key]: {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          equals: (filterData as any)[key],
+        },
+      })),
+    })
+  }
+  const whereConditions: Prisma.DonorRequestWhereInput =
+    andConditions.length > 0 ? { AND: andConditions } : {}
   const result = await prisma.donorRequest.findMany({
     skip,
     take: limit,
-
+    where: whereConditions,
     include: {
       user: {
         include: {
@@ -217,6 +242,13 @@ const AllDonorRequest = async (
         },
       },
     },
+    orderBy: pagination.sortBy
+      ? {
+          [pagination.sortBy]: 'asc',
+        }
+      : {
+          quantity: 'desc',
+        },
   })
   const total = await prisma.donorRequest.count({})
   return {

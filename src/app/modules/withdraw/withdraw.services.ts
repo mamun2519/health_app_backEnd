@@ -47,6 +47,7 @@ const getAllFromDB = async (
 ): Promise<IFilterResponse<Withdraw[]>> => {
   const { page, limit, skip } = calculatePagination(options)
   const { searchTerm, ...filterData } = filters
+  console.log(options)
   const andConditions = []
   if (searchTerm) {
     andConditions.push({
@@ -91,14 +92,13 @@ const getAllFromDB = async (
         },
       },
     },
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? {
-            [options.sortBy]: options.sortOrder,
-          }
-        : {
-            createdAt: 'desc',
-          },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
   const total = await prisma.withdraw.count({ where: whereConditions })
 

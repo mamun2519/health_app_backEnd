@@ -98,8 +98,8 @@ const myBookingAppointment = catchAsync(async (req: Request, res: Response) => {
 const myActiveGoogleMeetService = catchAsync(
   async (req: Request, res: Response) => {
     const user = (req as JwtPayload).user
-
-    const result = await Doctor.myActiveGoogleMeetService(user.user_id)
+    const options = receiveArrayAndReturnObject(req.query, paginationFiled)
+    const result = await Doctor.myActiveGoogleMeetService(user.user_id, options)
     sendApiResponse(res, {
       success: true,
       statusCode: StatusCodes.OK,

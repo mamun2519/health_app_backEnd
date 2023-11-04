@@ -76,8 +76,9 @@ const getAllFromDB = async (
   options: IPagination,
 ): Promise<IFilterResponse<Appointment[]>> => {
   const { searchTerm, ...filterData } = filter
+  console.log(searchTerm)
   const { page, limit, skip } = calculatePagination(options)
-  const andCondition = []
+  const andCondition: any[] = []
   if (searchTerm) {
     andCondition.push({
       OR: AppointmentSearchAbleFiled.map(filed => ({
@@ -114,14 +115,13 @@ const getAllFromDB = async (
       },
     },
 
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? {
-            [options.sortBy]: options.sortOrder,
-          }
-        : {
-            createdAt: 'desc',
-          },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
   const total = await prisma.appointment.count({ where: whereCondition })
 

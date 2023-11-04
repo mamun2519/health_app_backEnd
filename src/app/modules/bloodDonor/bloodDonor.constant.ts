@@ -8,7 +8,10 @@ export const bloodDonorFilterAbleFiled = [
 
 export const bloodDonorSearchAbleFiled = [
   'phone',
-  'blood_group',
-  'first_name',
-  'gender',
+  // 'blood_group',
+  // 'first_name',
+  // 'gender',
+  'location',
+  'donnetDate',
+  // 'quantity',
 ]

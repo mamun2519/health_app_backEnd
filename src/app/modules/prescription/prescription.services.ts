@@ -101,6 +101,7 @@ const getAllFromDB = async (
 ): Promise<IFilterResponse<Prescription[]>> => {
   const { page, limit, skip } = calculatePagination(options)
   const { searchTerm, ...filterData } = filters
+
   const andConditions = []
   if (searchTerm) {
     andConditions.push({
@@ -144,14 +145,13 @@ const getAllFromDB = async (
       medicines: true,
     },
 
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? {
-            [options.sortBy]: options.sortOrder,
-          }
-        : {
-            createdAt: 'desc',
-          },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
   const total = await prisma.prescription.count({ where: whereConditions })
 

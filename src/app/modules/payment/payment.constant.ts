@@ -7,8 +7,9 @@ export const PaymentFilterAbleFiled = [
 ]
 
 export const PaymentSearchAbleFiled = [
-  'price',
+  // 'price',
   'transactionId',
-  'discountedPrice',
+  // 'discountedPrice',
+  'serviceId',
   'paymentType',
 ]

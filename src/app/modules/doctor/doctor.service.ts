@@ -116,14 +116,13 @@ const getAllFromDB = async (
         },
       },
     },
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? {
-            [options.sortBy]: options.sortOrder,
-          }
-        : {
-            createdAt: 'desc',
-          },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
   const total = await prisma.doctorService.count({ where: whereConditions })
 
@@ -398,7 +397,9 @@ const myBookingAppointment = async (
 
 const myActiveGoogleMeetService = async (
   authUserId: string,
+  options: IPagination,
 ): Promise<GoogleMeet[] | null> => {
+  const { skip, limit } = calculatePagination(options)
   const doctor = await prisma.doctor.findFirst({
     where: {
       user_id: authUserId,
@@ -408,6 +409,8 @@ const myActiveGoogleMeetService = async (
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'Doctor Not found')
   }
   return await prisma.googleMeet.findMany({
+    take: limit,
+    skip,
     where: {
       doctorId: doctor.id,
       // status: meetingEnumStatus.Active,
@@ -424,6 +427,13 @@ const myActiveGoogleMeetService = async (
         },
       },
     },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
 }
 const activeMeet = async (id: string): Promise<GoogleMeet | null> => {
@@ -582,14 +592,13 @@ const myPaymentList = async (
         },
       },
     },
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? {
-            [options.sortBy]: options.sortOrder,
-          }
-        : {
-            createdAt: 'desc',
-          },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
   const total = await prisma.payment.count({
     where: {
@@ -624,14 +633,13 @@ const myWithdrawList = async (
     where: {
       doctorId: doctor?.doctor?.id,
     },
-    orderBy:
-      options.sortBy && options.sortOrder
-        ? {
-            [options.sortBy]: options.sortOrder,
-          }
-        : {
-            createdAt: 'desc',
-          },
+    orderBy: options.sortBy
+      ? {
+          [options.sortBy]: 'asc',
+        }
+      : {
+          createdAt: 'desc',
+        },
   })
   const total = await prisma.withdraw.count({
     where: {

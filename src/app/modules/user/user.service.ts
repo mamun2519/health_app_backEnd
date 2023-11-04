@@ -263,9 +263,13 @@ const myDonorRequest = async (
         },
       },
     },
-    // orderBy: pagination?.sortBy && {
-    //   [pagination.sortBy]: 'asc',
-    // },
+    orderBy: pagination.sortBy
+      ? {
+          [pagination.sortBy]: 'asc',
+        }
+      : {
+          quantity: 'desc',
+        },
   })
   const total = await prisma.donorRequest.count({
     where: {
