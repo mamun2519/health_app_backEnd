@@ -52,4 +52,8 @@ export type IAdminActivity = {
     bloodGroup: string
     totalBloodDonatedQuantity: number
   }[]
+  lastWithdraw: {
+    name: string
+    amount: number
+  }[]
 }

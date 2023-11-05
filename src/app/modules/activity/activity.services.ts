@@ -317,13 +317,38 @@ const adminActivity = async (id: string): Promise<IAdminActivity> => {
     }
   })
 
-  console.log(finalTop5Donor)
+  const withdraw = await prisma.withdraw.findMany({
+    take: 5,
+    where: {
+      status: 'Complete',
+    },
+    include: {
+      doctor: {
+        include: {
+          user: {
+            include: {
+              profile: true,
+            },
+          },
+        },
+      },
+    },
+  })
+  const Top5Withdraw = withdraw.map(withdraw => {
+    return {
+      name: `${withdraw.doctor.user.profile?.first_name} ${withdraw.doctor.user.profile?.last_name}`,
+      amount: withdraw.amount,
+    }
+  })
+
+  console.log(withdraw)
 
   return {
     appointment: appointment,
     topService: finalTop5Service,
     topDonor: finalTop5Donor,
     service,
+    lastWithdraw: Top5Withdraw,
     balance: Number(balance[0].balance),
     sales: totalSales,
     completeDonation,
