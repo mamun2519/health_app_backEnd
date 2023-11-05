@@ -245,7 +245,6 @@ const adminActivity = async (id: string): Promise<IAdminActivity> => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const uniqueObjects: any = {}
 
-  // Iterate through the array and add up prices for duplicates
   sales.forEach(obj => {
     const key = obj.serviceId
     if (uniqueObjects[key]) {
@@ -255,7 +254,6 @@ const adminActivity = async (id: string): Promise<IAdminActivity> => {
     }
   })
 
-  // Convert the uniqueObjects object back into an array
   const uniqueArrayOfObjects = Object.values(uniqueObjects)
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -263,7 +261,7 @@ const adminActivity = async (id: string): Promise<IAdminActivity> => {
 
   // Get the top 5 unique objects with the highest prices
   const top5Prices = uniqueArrayOfObjects.slice(0, 5)
-  console.log(top5Prices)
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const finalTop5Service = top5Prices.map((service: any) => {
     return {
@@ -272,11 +270,59 @@ const adminActivity = async (id: string): Promise<IAdminActivity> => {
       price: service.price,
     }
   })
-  console.log(finalTop5Service)
+
+  const donorRequest = await prisma.donorRequest.findMany({
+    where: {
+      status: 'Completed',
+    },
+    include: {
+      donor: {
+        include: {
+          user: {
+            include: {
+              profile: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const uniqueDonorObjects: any = {}
+
+  donorRequest.forEach(obj => {
+    const key = obj?.donorId
+    if (uniqueDonorObjects[key]) {
+      uniqueDonorObjects[key].quantity += obj.quantity
+    } else {
+      uniqueDonorObjects[key] = { ...obj }
+    }
+  })
+
+  const uniqueDonor = Object.values(uniqueDonorObjects)
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  uniqueDonor.sort((a: any, b: any) => b.price - a.price)
+
+  // Get the top 5 unique objects with the highest prices
+  const top5Donor = uniqueDonor.slice(0, 5)
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const finalTop5Donor = top5Donor.map((donor: any) => {
+    return {
+      donorName: `${donor.donor.user.profile.first_name} ${donor.donor.user.profile.last_name}`,
+      bloodGroup: donor.donor.user.profile.blood_group,
+      totalBloodDonatedQuantity: donor.quantity,
+    }
+  })
+
+  console.log(finalTop5Donor)
 
   return {
     appointment: appointment,
     topService: finalTop5Service,
+    topDonor: finalTop5Donor,
     service,
     balance: Number(balance[0].balance),
     sales: totalSales,
