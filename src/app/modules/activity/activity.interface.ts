@@ -37,9 +37,14 @@ export type IAdminActivity = {
   service: number
   completeDonation: number
   balance: number
-
+  sales: number
   pendingWithdraw: number
   bloodDonor: number
   doctor: number
   name: string
+  topService: {
+    doctorName: string
+    serviceName: string
+    price: number
+  }[]
 }
