@@ -7,6 +7,14 @@ import {
   IDonorActivity,
   IUserActivity,
 } from './activity.interface'
+import {
+  DoctorResentWithdraw,
+  DoctorTop5ServicePrice,
+  FinalTop5Donar,
+  FinalTop5Service,
+  MyCompleteBloodDonation,
+  MyDonarRequest,
+} from './activity.utils'
 
 const userActivity = async (id: string): Promise<IUserActivity> => {
   const user = await prisma.user.findFirst({
@@ -53,10 +61,13 @@ const userActivity = async (id: string): Promise<IUserActivity> => {
     schedule: lastBookingSchedule[0]?.slatTime ?? 'no schedule',
   }
 
+  const myDonarRequest = await MyDonarRequest(user.id as string)
+  console.log(myDonarRequest)
   return {
     bookingAppointment: appointment,
     donorRequest,
     completeDonation,
+    myDonarRequest,
     schedule,
     name: `${user.profile?.first_name}  ${user.profile?.last_name} `,
   }
@@ -116,11 +127,17 @@ const donorActivity = async (id: string): Promise<IDonorActivity> => {
     schedule: lastBookingSchedule[0]?.slatTime ?? 'no schedule',
   }
 
+  const myCompleteDonation = await MyCompleteBloodDonation(
+    user?.bloodDonor?.id as string,
+  )
+  console.log(myCompleteDonation)
+
   return {
     bookingAppointment: appointment,
     donorRequest,
     completeDonation,
     schedule,
+    myCompleteDonation,
     pendingRequest,
     name: `${user.profile?.first_name}  ${user.profile?.last_name} `,
   }
@@ -171,9 +188,17 @@ const doctorActivity = async (id: string): Promise<IDoctorActivity> => {
     },
   })
 
+  const { finalTopPriceService, totalSales } = await DoctorTop5ServicePrice(
+    user?.doctor?.id as string,
+  )
+
+  const resentWithdraw = await DoctorResentWithdraw(user?.doctor?.id as string)
   return {
     appointment: appointment,
     service,
+    resentWithdraw,
+    top5MyServicePrice: finalTopPriceService,
+    myTotalSales: totalSales,
     balance: Number(user?.doctor?.balance),
     patient: Number(user?.doctor?.total_patient),
     completeDonation,
@@ -224,99 +249,10 @@ const adminActivity = async (id: string): Promise<IAdminActivity> => {
       role: 'BloodDonor',
     },
   })
-  const sales = await prisma.payment.findMany({
-    include: {
-      service: {
-        include: {
-          doctor: {
-            include: {
-              user: {
-                include: {
-                  profile: true,
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-  })
-  const totalSales = sales.reduce((acc, obj) => acc + obj.price, 0)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const uniqueObjects: any = {}
 
-  sales.forEach(obj => {
-    const key = obj.serviceId
-    if (uniqueObjects[key]) {
-      uniqueObjects[key].price += obj.price
-    } else {
-      uniqueObjects[key] = { ...obj }
-    }
-  })
+  const { totalSales, finalTop5Service } = await FinalTop5Service()
 
-  const uniqueArrayOfObjects = Object.values(uniqueObjects)
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  uniqueArrayOfObjects.sort((a: any, b: any) => b.price - a.price)
-
-  // Get the top 5 unique objects with the highest prices
-  const top5Prices = uniqueArrayOfObjects.slice(0, 5)
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const finalTop5Service = top5Prices.map((service: any) => {
-    return {
-      doctorName: `${service.service.doctor.user.profile.first_name} ${service.service.doctor.user.profile.last_name}`,
-      serviceName: service.service.title,
-      price: service.price,
-    }
-  })
-
-  const donorRequest = await prisma.donorRequest.findMany({
-    where: {
-      status: 'Completed',
-    },
-    include: {
-      donor: {
-        include: {
-          user: {
-            include: {
-              profile: true,
-            },
-          },
-        },
-      },
-    },
-  })
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const uniqueDonorObjects: any = {}
-
-  donorRequest.forEach(obj => {
-    const key = obj?.donorId
-    if (uniqueDonorObjects[key]) {
-      uniqueDonorObjects[key].quantity += obj.quantity
-    } else {
-      uniqueDonorObjects[key] = { ...obj }
-    }
-  })
-
-  const uniqueDonor = Object.values(uniqueDonorObjects)
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  uniqueDonor.sort((a: any, b: any) => b.price - a.price)
-
-  // Get the top 5 unique objects with the highest prices
-  const top5Donor = uniqueDonor.slice(0, 5)
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const finalTop5Donor = top5Donor.map((donor: any) => {
-    return {
-      donorName: `${donor.donor.user.profile.first_name} ${donor.donor.user.profile.last_name}`,
-      bloodGroup: donor.donor.user.profile.blood_group,
-      totalBloodDonatedQuantity: donor.quantity,
-    }
-  })
-
+  const finalTop5Donor = await FinalTop5Donar()
   const withdraw = await prisma.withdraw.findMany({
     take: 5,
     where: {
@@ -333,6 +269,9 @@ const adminActivity = async (id: string): Promise<IAdminActivity> => {
         },
       },
     },
+    orderBy: {
+      amount: 'desc',
+    },
   })
   const Top5Withdraw = withdraw.map(withdraw => {
     return {
@@ -340,8 +279,6 @@ const adminActivity = async (id: string): Promise<IAdminActivity> => {
       amount: withdraw.amount,
     }
   })
-
-  console.log(withdraw)
 
   return {
     appointment: appointment,

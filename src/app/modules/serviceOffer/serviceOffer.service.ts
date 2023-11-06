@@ -3,10 +3,11 @@ import prisma from '../../../prisma/prisma'
 import { IServiceOfferFilter } from './serviceOffer.interface'
 import { IPagination } from '../../../interface/pagination'
 import { calculatePagination } from '../../../helper/paginationHalper'
-import { ServiceOfferSearchAbleFiled } from '../prescription/prescription.constant'
+
 import { IFilterResponse } from '../../../interface/userFilteResponse'
 import Send_API_Error from '../../../error/apiError'
 import { StatusCodes } from 'http-status-codes'
+import { ServiceOfferSearchAbleFiled } from './serviceOffer.constant'
 
 const insetIntoDB = async (
   data: ServiceOffer,

@@ -5,8 +5,9 @@ import sendApiResponse from '../../../shared/APIResponse'
 import { StatusCodes } from 'http-status-codes'
 import { JwtPayload } from 'jsonwebtoken'
 import { receiveArrayAndReturnObject } from '../../../shared/pick'
-import { ServiceOfferFilterAbleFiled } from '../prescription/prescription.constant'
+// import { ServiceOfferFilterAbleFiled } from '../prescription/prescription.constant'
 import { paginationFiled } from '../../../constant/pagination'
+import { ServiceOfferFilterAbleFiled } from './serviceOffer.constant'
 
 const insetIntoDB = catchAsync(async (req: Request, res: Response) => {
   const user = (req as JwtPayload).user
