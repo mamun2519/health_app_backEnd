@@ -633,6 +633,13 @@ const myWithdrawList = async (
     where: {
       doctorId: doctor?.doctor?.id,
     },
+    include: {
+      user: {
+        include: {
+          profile: true,
+        },
+      },
+    },
     orderBy: options.sortBy
       ? {
           [options.sortBy]: 'asc',

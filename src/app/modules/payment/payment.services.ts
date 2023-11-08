@@ -1,4 +1,10 @@
-import { Appointment, CompanyBalance, Payment, Prisma } from '@prisma/client'
+import {
+  Appointment,
+  CompanyBalance,
+  Payment,
+  Prisma,
+  ServiceOffer,
+} from '@prisma/client'
 import prisma from '../../../prisma/prisma'
 import Send_API_Error from '../../../error/apiError'
 import { StatusCodes } from 'http-status-codes'
@@ -254,8 +260,25 @@ const paymentByStripe = async (price: string) => {
   }
 }
 
+const applyPromoCode = async (data: {
+  id: string
+  promoCode: string
+}): Promise<ServiceOffer | null> => {
+  const matchPromoCode = await prisma.serviceOffer.findFirst({
+    where: {
+      serviceId: data.id,
+      promoCode: data.promoCode,
+    },
+  })
+  if (!matchPromoCode) {
+    throw new Send_API_Error(StatusCodes.NOT_FOUND, 'Invalid Promo Code!')
+  }
+
+  return matchPromoCode
+}
 export const PaymentService = {
   OrderAppointment,
+  applyPromoCode,
   createPayment,
   getAllFromDB,
   getByIdFromDB,

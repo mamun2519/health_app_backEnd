@@ -28,5 +28,6 @@ route.patch(
   PaymentController.updateByIdIntoDB,
 )
 route.post('/create-balance', PaymentController.createCompanyBalance)
+route.post('/apply-promo-code', PaymentController.applyPromoCode)
 
 export const PaymentRoute = route

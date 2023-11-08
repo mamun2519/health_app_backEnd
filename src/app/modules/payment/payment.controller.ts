@@ -95,8 +95,19 @@ const paymentByStripe = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const applyPromoCode = catchAsync(async (req: Request, res: Response) => {
+  const result = await PaymentService.applyPromoCode(req.body)
+  sendApiResponse(res, {
+    success: true,
+    message: 'Promo Code offer Successfully',
+    statusCode: StatusCodes.OK,
+    data: result,
+  })
+})
+
 export const PaymentController = {
   createPayment,
+  applyPromoCode,
   getAllFromDB,
   getByIdFromDB,
   updateByIdIntoDB,
