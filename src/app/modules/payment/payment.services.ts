@@ -242,13 +242,13 @@ const OrderAppointment = async (
   }
 }
 
-const paymentByStripe = async (price: string) => {
+const paymentByStripe = async (price: number) => {
   // Create a PaymentIntent with the order amount and currency
   console.log('price', price)
   const paymentIntent = await stripe.paymentIntents.create({
     amount: Number(price),
     currency: 'usd',
-
+    // payment_method_types: ['card'],
     automatic_payment_methods: {
       enabled: true,
     },
@@ -268,6 +268,7 @@ const applyPromoCode = async (data: {
     where: {
       serviceId: data.id,
       promoCode: data.promoCode,
+      status: 'Active',
     },
   })
   if (!matchPromoCode) {

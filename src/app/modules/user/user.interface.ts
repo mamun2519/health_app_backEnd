@@ -28,6 +28,7 @@ export const DoctorAbleFiled = [
 ]
 
 export type IUpdateUser = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   profile?: Profile
   address?: PermanentAddress
 }

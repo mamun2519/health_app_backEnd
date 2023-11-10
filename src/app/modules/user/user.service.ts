@@ -105,6 +105,7 @@ const getByIdFromDB = async (id: string): Promise<User | null> => {
           doctorServices: {
             include: {
               serviceSalt: true,
+              serviceOffers: true,
             },
           },
         },
@@ -710,11 +711,13 @@ const updateUserProfile = async (
   console.log('id', authUserId)
   console.log(data)
   const { address, profile } = data
-  const user = await prisma.user.findUnique({
+
+  console.log('profile', profile)
+  const user = await prisma.user.findFirst({
     where: { id: authUserId },
     include: { profile: true },
   })
-  console.log(user)
+  // console.log(user)
   if (!user) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
   }
@@ -722,7 +725,16 @@ const updateUserProfile = async (
   const result = await prisma.$transaction(async transactionClient => {
     const profiles = await transactionClient.profile.update({
       where: { user_id: authUserId },
-      data: { ...profile },
+      data: {
+        avatar: profile?.avatar,
+        cover: profile?.cover,
+        first_name: profile?.first_name,
+        last_name: profile?.last_name,
+        phone: profile?.phone,
+        blood_group: profile?.blood_group,
+        gender: profile?.gender,
+        date_of_birth: profile?.date_of_birth,
+      },
     })
 
     console.log(profiles)
