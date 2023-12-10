@@ -11,4 +11,7 @@ export const env_config = {
     refresh_token: process.env.REFRESH_TOKEN,
     refresh_expire_in: process.env.REFRESH_EXPIRE_IN,
   },
+  myEmail: process.env.MyEmail,
+  emailPassword: process.env.emailPassword,
+  gmailHost: process.env.host,
 }

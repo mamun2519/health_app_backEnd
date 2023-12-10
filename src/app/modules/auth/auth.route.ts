@@ -9,5 +9,5 @@ router.post('/login', AuthController.userLogin)
 router.post('/forget-password', AuthController.forgetPassword)
 router.post('/reset-password', AuthController.resetPassword)
 router.post('/username/:id', AuthController.changeUserName)
-
+router.post('/forget-request', AuthController.requestForgetPassword)
 export const AuthRoutes = router

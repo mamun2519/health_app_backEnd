@@ -102,6 +102,17 @@ const changeUserName = catchAsync(async (req: Request, res: Response) => {
     data: result,
   })
 })
+const requestForgetPassword = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await AuthService.requestForgetPassword(req.body)
+    sendApiResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: 'Password Request Successfully!',
+      data: result,
+    })
+  },
+)
 
 export const AuthController = {
   createUser,
@@ -111,4 +122,5 @@ export const AuthController = {
   forgetPassword,
   resetPassword,
   changeUserName,
+  requestForgetPassword,
 }

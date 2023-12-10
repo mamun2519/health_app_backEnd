@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from '../../../prisma/prisma'
 import {
   IDonorAndDoctorRequest,
@@ -6,6 +7,7 @@ import {
   IUserRequest,
   IUserResponse,
 } from './auth.interface'
+import nodemailer from 'nodemailer'
 import Send_API_Error from '../../../error/apiError'
 import { StatusCodes } from 'http-status-codes'
 import { comparePassword, hashPasswordGenerator } from '../../../shared/bcrypt'
@@ -422,6 +424,69 @@ const changeUserNameIntoDB = async (
   return result
 }
 
+const requestForgetPassword = async (data: {
+  email: string
+}): Promise<{ sendMessage: string; stepNo: number }> => {
+  console.log(data.email)
+  const isExistUser = await checkUser(data?.email as string)
+  if (!isExistUser) {
+    throw new Send_API_Error(
+      StatusCodes.NOT_FOUND,
+      'Please Provide valid email',
+    )
+  }
+
+  const userProfile = await prisma.profile.findFirst({
+    where: {
+      user_id: isExistUser.id,
+    },
+  })
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    host: env_config.gmailHost,
+    port: 25,
+    secure: false,
+    requireTLS: true,
+    auth: {
+      user: env_config.myEmail,
+      pass: env_config.emailPassword,
+    },
+  })
+  // console.log(data.email)
+
+  const resetCode = Math.floor(1000 + Math.random() * 9000).toString()
+
+  const mailOptions = {
+    from: env_config.myEmail,
+    to: data.email,
+    subject: 'Password Reset Code',
+    // text: `Your password reset code is: ${resetCode}`,
+    html:
+      '<div> <h3 >Hi  ' +
+      userProfile?.first_name +
+      userProfile?.last_name +
+      `,
+     
+      </h3>
+      <p>Please use The code to reset the password for the health care app. </p>
+      <p>Here is Your Code<h1>${resetCode}</h1></p>
+      <p> Thank You</p>
+      <p>Health Care Team </p>
+      </div>`,
+  }
+  console.log(mailOptions)
+  transporter.sendMail(mailOptions, function (error: any) {
+    if (error) {
+      throw new Send_API_Error(StatusCodes.BAD_REQUEST, 'Error sending email')
+    }
+  })
+  return {
+    sendMessage: 'Email Send',
+    stepNo: 2,
+  }
+}
+
 export const AuthService = {
   createUserFromDB,
   createBloodDonorFromDB,
@@ -430,4 +495,5 @@ export const AuthService = {
   forgetPasswordIntoDB,
   resetPasswordIntoDB,
   changeUserNameIntoDB,
+  requestForgetPassword,
 }

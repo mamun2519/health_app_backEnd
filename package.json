@@ -25,6 +25,8 @@
     "@types/cors": "^2.8.14",
     "@types/jsonwebtoken": "^9.0.3",
     "@types/node": "^20.8.4",
+    "@types/nodemailer": "^6.4.14",
+    "@types/nodemailer-mailgun-transport": "^1.4.6",
     "@typescript-eslint/eslint-plugin": "^6.7.5",
     "@typescript-eslint/parser": "^6.7.5",
     "eslint": "^8.51.0",
@@ -46,6 +48,8 @@
     "http-status-code": "^2.1.0",
     "http-status-codes": "^2.3.0",
     "jsonwebtoken": "^9.0.2",
+    "nodemailer": "^6.9.7",
+    "nodemailer-mailgun-transport": "^2.1.5",
     "stripe": "^14.2.0",
     "ts-node-dev": "^2.0.0",
     "zod": "^3.22.4"

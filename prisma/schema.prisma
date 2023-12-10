@@ -427,6 +427,16 @@ model Cart {
   user           User          @relation(fields: [userId], references: [id])
 }
 
+model ForgetCode {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  code      Int
+  email     String
+
+  @@map("forget_code")
+}
+
 model CompanyBalance {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
