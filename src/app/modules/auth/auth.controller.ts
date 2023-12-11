@@ -113,6 +113,29 @@ const requestForgetPassword = catchAsync(
     })
   },
 )
+const CheckValidationResetCode = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await AuthService.CheckValidationResetCode(req.body)
+    sendApiResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: 'Password Validation Reset Code Successfully!',
+      data: result,
+    })
+  },
+)
+
+const forgetPasswordWithCode = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await AuthService.forgetPasswordWithCode(req.body)
+    sendApiResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: 'Password Forget With Code Successfully!',
+      data: result,
+    })
+  },
+)
 
 export const AuthController = {
   createUser,
@@ -123,4 +146,6 @@ export const AuthController = {
   resetPassword,
   changeUserName,
   requestForgetPassword,
+  forgetPasswordWithCode,
+  CheckValidationResetCode,
 }

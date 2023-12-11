@@ -10,4 +10,6 @@ router.post('/forget-password', AuthController.forgetPassword)
 router.post('/reset-password', AuthController.resetPassword)
 router.post('/username/:id', AuthController.changeUserName)
 router.post('/forget-request', AuthController.requestForgetPassword)
+router.post('/check-reset-code', AuthController.CheckValidationResetCode)
+router.post('/forget-code', AuthController.forgetPasswordWithCode)
 export const AuthRoutes = router

@@ -16,7 +16,7 @@ import { userNameGenerator } from '../../../shared/utils'
 import { jwtHelper } from '../../../helper/jwtHelper'
 import { Secret } from 'jsonwebtoken'
 import { checkUser, checkUserName, getProfileById } from './auth.utils'
-import { Profile, User, UserRole, UserStatus } from '@prisma/client'
+import { ForgetCode, Profile, User, UserRole, UserStatus } from '@prisma/client'
 
 const createUserFromDB = async (data: IUserRequest): Promise<IUserResponse> => {
   const { name, avatar, cover, email, password, role } = data
@@ -457,6 +457,12 @@ const requestForgetPassword = async (data: {
 
   const resetCode = Math.floor(1000 + Math.random() * 9000).toString()
 
+  await prisma.forgetCode.create({
+    data: {
+      email: data.email,
+      code: Number(resetCode),
+    },
+  })
   const mailOptions = {
     from: env_config.myEmail,
     to: data.email,
@@ -487,6 +493,34 @@ const requestForgetPassword = async (data: {
   }
 }
 
+const CheckValidationResetCode = async (
+  data: ForgetCode,
+): Promise<{ sendMessage: string; stepNo: number }> => {
+  const isExistCode = await prisma.forgetCode.findFirst({
+    where: {
+      email: data.email,
+      code: data.code,
+    },
+  })
+  if (!isExistCode) {
+    throw new Send_API_Error(StatusCodes.NOT_FOUND, 'Invalid Code')
+  }
+  return {
+    sendMessage: 'Code is Matched',
+    stepNo: 3,
+  }
+}
+const forgetPasswordWithCode = async (
+  userCredential: Partial<User>,
+): Promise<{ sendMessage: string; stepNo: number }> => {
+  await forgetPasswordIntoDB(userCredential)
+  await prisma.forgetCode.deleteMany({ where: { email: userCredential.email } })
+  return {
+    sendMessage: 'Password Change Successfully',
+    stepNo: 4,
+  }
+}
+
 export const AuthService = {
   createUserFromDB,
   createBloodDonorFromDB,
@@ -496,4 +530,6 @@ export const AuthService = {
   resetPasswordIntoDB,
   changeUserNameIntoDB,
   requestForgetPassword,
+  CheckValidationResetCode,
+  forgetPasswordWithCode,
 }
