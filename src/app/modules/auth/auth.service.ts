@@ -445,7 +445,7 @@ const requestForgetPassword = async (data: {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     host: env_config.gmailHost,
-    port: 25,
+    port: 3000,
     secure: false,
     requireTLS: true,
     auth: {
