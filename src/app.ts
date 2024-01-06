@@ -9,11 +9,12 @@ const app: Application = express()
 
 //middleware
 app.use([
-  cors(),
   express.json(),
   express.urlencoded({ extended: true }),
   cookieParser(),
 ])
+app.use(cors())
+
 // app.use(express.urlencoded({ extended: true }))
 // application route
 app.use('/api/v1', RootRoutes)

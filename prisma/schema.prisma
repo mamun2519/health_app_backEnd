@@ -16,27 +16,29 @@ model Test {
 }
 
 model User {
-  id              String           @id @default(uuid())
-  email           String
-  password        String
-  role            UserRole         @default(User)
-  status          UserStatus       @default(Active)
-  verified        UserVerification @default(false)
-  bloodDonor      BloodDonor?
-  doctor          Doctor?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  profile         Profile?
-  donorRequests   DonorRequest[]
-  notifications   Notification[]
-  donorReviews    DonorReview[]
-  ServiceReview   ServiceReview[]
-  appointments    Appointment[]
-  prescriptions   Prescription[]
-  meetingRequests MeetingRequest[]
-  payments        Payment[]
-  Withdraw        Withdraw[]
-  Cart            Cart[]
+  id               String           @id @default(uuid())
+  email            String
+  password         String
+  role             UserRole         @default(User)
+  status           UserStatus       @default(Active)
+  verified         UserVerification @default(false)
+  bloodDonor       BloodDonor?
+  doctor           Doctor?
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  profile          Profile?
+  donorRequests    DonorRequest[]
+  notifications    Notification[]
+  donorReviews     DonorReview[]
+  ServiceReview    ServiceReview[]
+  appointments     Appointment[]
+  prescriptions    Prescription[]
+  meetingRequests  MeetingRequest[]
+  payments         Payment[]
+  Withdraw         Withdraw[]
+  Cart             Cart[]
+  sentMessages     Message[]        @relation("SentMessages")
+  receivedMessages Message[]        @relation("ReceivedMessages")
 
   @@map("users")
 }
@@ -444,6 +446,16 @@ model CompanyBalance {
   balance   Int
 
   @@map("company_balance")
+}
+
+model Message {
+  id         String   @id @default(uuid())
+  content    String
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id])
+  senderId   String
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  receiverId String
+  createdAt  DateTime @default(now())
 }
 
 enum WithdrawEnumStatus {

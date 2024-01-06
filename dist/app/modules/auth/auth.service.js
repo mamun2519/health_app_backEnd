@@ -351,7 +351,8 @@ const requestForgetPassword = (data) => __awaiter(void 0, void 0, void 0, functi
     const transporter = nodemailer_1.default.createTransport({
         service: 'gmail',
         host: config_1.env_config.gmailHost,
-        port: 25,
+        // port: 25,
+        port: 3000,
         secure: false,
         requireTLS: true,
         auth: {
