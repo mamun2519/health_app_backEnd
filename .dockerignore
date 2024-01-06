@@ -1,0 +1,14 @@
+# Exclude files and directories commonly not needed in a Docker image
+
+# Exclude version control system directories
+.git
+.gitignore
+.svn
+
+# Exclude node_modules directory for Node.js applications
+node_modules
+
+# Exclude build and temporary directories
+build
+temp
+tmp
