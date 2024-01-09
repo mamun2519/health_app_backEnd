@@ -31,13 +31,13 @@ const filtersBloodDonorFromDB = catchAsync(
 )
 
 const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
-  // const filersData = receiveArrayAndReturnObject(
-  //   req.query,
-  //   bloodDonorFilterAbleFiled,
-  // )
+  const filersData = receiveArrayAndReturnObject(
+    req.query,
+    bloodDonorFilterAbleFiled,
+  )
   const pagination = receiveArrayAndReturnObject(req.query, paginationFiled)
 
-  const result = await BloodDonorService.getAllFromDB(pagination)
+  const result = await BloodDonorService.getAllFromDB(pagination, filersData)
   sendApiResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
