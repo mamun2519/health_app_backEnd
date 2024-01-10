@@ -35,6 +35,7 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
     req.query,
     bloodDonorFilterAbleFiled,
   )
+  // console.log(filersData)
   const pagination = receiveArrayAndReturnObject(req.query, paginationFiled)
 
   const result = await BloodDonorService.getAllFromDB(pagination, filersData)

@@ -13,5 +13,6 @@ export const bloodDonorSearchAbleFiled = [
   // 'gender',
   'location',
   'donnetDate',
+  'blood_group',
   // 'quantity',
 ]

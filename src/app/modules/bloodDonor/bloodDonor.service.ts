@@ -86,35 +86,12 @@ const filtersBloodDonorFromDB = async (
 }
 
 const getAllFromDB = async (
-  filters: IFiltersUserDonorRequest,
   pagination: IPagination,
+  filters: IFiltersUserDonorRequest,
 ): Promise<IFilterResponse<User[]>> => {
   const { skip, limit, page } = calculatePagination(pagination)
-  const { searchTerm, ...filterData } = filters
-  console.log(searchTerm)
-  const andConditions = []
-  if (searchTerm) {
-    andConditions.push({
-      OR: bloodDonorSearchAbleFiled.map(filed => ({
-        [filed]: {
-          contains: searchTerm,
-          mode: 'insensitive',
-        },
-      })),
-    })
-  }
-  if (Object.keys(filterData).length > 0) {
-    andConditions.push({
-      AND: Object.keys(filterData).map(key => ({
-        [key]: {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          equals: (filterData as any)[key],
-        },
-      })),
-    })
-  }
 
-  const donors = await prisma.user.findMany({
+  let donors = await prisma.user.findMany({
     skip,
     take: limit,
     where: {
@@ -139,6 +116,11 @@ const getAllFromDB = async (
         },
   })
 
+  if (filters.blood_group) {
+    donors = donors.filter(
+      donor => donor.profile?.blood_group == filters.blood_group,
+    )
+  }
   const total = await prisma.user.count({
     where: { role: UserRole.BloodDonor },
   })
