@@ -666,9 +666,10 @@ const myWithdrawList = async (
 
 const allDoctorFromDB = async (
   options: IPagination,
+  filter: string,
 ): Promise<IFilterResponse<User[]>> => {
   const { page, limit, skip } = calculatePagination(options)
-  const result = await prisma.user.findMany({
+  let result = await prisma.user.findMany({
     skip,
     take: limit,
     where: {
@@ -693,6 +694,9 @@ const allDoctorFromDB = async (
           createdAt: 'desc',
         },
   })
+  if (filter) {
+    result = result.filter(doctor => doctor.doctor?.specialist === filter)
+  }
 
   return {
     meta: {

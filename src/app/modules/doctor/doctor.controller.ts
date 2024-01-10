@@ -185,7 +185,10 @@ const myPrescription = catchAsync(async (req: Request, res: Response) => {
 })
 const allDoctorFromDB = catchAsync(async (req: Request, res: Response) => {
   const options = receiveArrayAndReturnObject(req.query, paginationFiled)
-  const result = await Doctor.allDoctorFromDB(options)
+  const result = await Doctor.allDoctorFromDB(
+    options,
+    req.query.specialist as string,
+  )
   sendApiResponse(res, {
     success: true,
     statusCode: StatusCodes.OK,
