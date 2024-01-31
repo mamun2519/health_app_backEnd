@@ -39,6 +39,10 @@ model User {
   Cart             Cart[]
   sentMessages     Message[]        @relation("SentMessages")
   receivedMessages Message[]        @relation("ReceivedMessages")
+  posts            Post[]
+  likes            PostLike[]
+  comments         PostComment[]
+  replyComments    ReplyComment[]
 
   @@map("users")
 }
@@ -456,6 +460,81 @@ model Message {
   receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id])
   receiverId String
   createdAt  DateTime @default(now())
+}
+
+model Post {
+  id           String         @id @default(uuid())
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  userId       String
+  user         User           @relation(fields: [userId], references: [id])
+  text         String
+  like         Int            @default(0)
+  felling      String?
+  hospital     String?
+  location     String?
+  bloodQuanity Int?
+  donationDate String?
+  status       String         @default("normal")
+  avatar       PostAvatar[]
+  likeUsers    PostLike[]
+  commentUser  PostComment[]
+  ReplyComment ReplyComment[]
+
+  @@map("post")
+}
+
+model PostAvatar {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  url       String
+  publicId  String
+
+  @@map("post_avatar")
+}
+
+model PostLike {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id])
+
+  @@map("post_like")
+}
+
+model PostComment {
+  id            String         @id @default(uuid())
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  userId        String
+  user          User           @relation(fields: [userId], references: [id])
+  postId        String
+  post          Post           @relation(fields: [postId], references: [id])
+  comment       String
+  replyComments ReplyComment[]
+
+  @@map("post_comment")
+}
+
+model ReplyComment {
+  id           String      @id @default(uuid())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  userId       String
+  user         User        @relation(fields: [userId], references: [id])
+  postId       String
+  post         Post        @relation(fields: [postId], references: [id])
+  commentId    String
+  commnet      PostComment @relation(fields: [commentId], references: [id])
+  replyComment String
+
+  @@map("reply_post_comment")
 }
 
 enum WithdrawEnumStatus {
