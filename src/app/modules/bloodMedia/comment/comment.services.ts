@@ -50,7 +50,7 @@ const myAllCommentFromDB = async (userId: string): Promise<PostComment[]> => {
     },
   })
 }
-
+//Reply Comment Services
 const insertReplyCommentIntoDB = async (
   userId: string,
   replyComment: ReplyComment,
@@ -62,6 +62,42 @@ const insertReplyCommentIntoDB = async (
   replyComment.userId = userId
   return await prisma.replyComment.create({ data: replyComment })
 }
+const updateReplyCommentIntoDB = async (
+  replyCommentId: string,
+  replyComment: ReplyComment,
+): Promise<ReplyComment> => {
+  return await prisma.replyComment.update({
+    where: { id: replyCommentId },
+    data: replyComment,
+  })
+}
+const deleteReplyCommentByIdFromDB = async (
+  replyCommentId: string,
+): Promise<ReplyComment | null> => {
+  return await prisma.replyComment.delete({
+    where: {
+      id: replyCommentId,
+    },
+  })
+}
+const getReplyCommentByIdFromDB = async (
+  replyCommentId: string,
+): Promise<ReplyComment | null> => {
+  return await prisma.replyComment.findFirst({
+    where: {
+      id: replyCommentId,
+    },
+  })
+}
+const myAllReplyCommentFromDB = async (
+  userId: string,
+): Promise<ReplyComment[]> => {
+  return await prisma.replyComment.findMany({
+    where: {
+      userId,
+    },
+  })
+}
 
 export const CommentService = {
   insertCommentIntoDB,
@@ -70,4 +106,8 @@ export const CommentService = {
   getCommentByIdFromDB,
   myAllCommentFromDB,
   insertReplyCommentIntoDB,
+  updateReplyCommentIntoDB,
+  deleteReplyCommentByIdFromDB,
+  getReplyCommentByIdFromDB,
+  myAllReplyCommentFromDB,
 }
