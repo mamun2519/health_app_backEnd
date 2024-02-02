@@ -34,9 +34,27 @@ const deleteCommentByIdFromDB = async (
     },
   })
 }
+const getCommentByIdFromDB = async (
+  commentId: string,
+): Promise<PostComment | null> => {
+  return await prisma.postComment.findFirst({
+    where: {
+      id: commentId,
+    },
+  })
+}
+const myAllCommentFromDB = async (userId: string): Promise<PostComment[]> => {
+  return await prisma.postComment.findMany({
+    where: {
+      userId,
+    },
+  })
+}
 
 export const CommentService = {
   insertCommentIntoDB,
   updateCommentIntoDB,
   deleteCommentByIdFromDB,
+  getCommentByIdFromDB,
+  myAllCommentFromDB,
 }
