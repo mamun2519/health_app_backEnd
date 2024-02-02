@@ -3,6 +3,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import globalErrorHandler from './app/middleware/globalErrorHandler'
 import { RootRoutes } from './app/routes'
+import { BloodMediaRoutes } from './app/routes/bloodMedia'
 
 //root Application
 const app: Application = express()
@@ -18,6 +19,8 @@ app.use(cors())
 // app.use(express.urlencoded({ extended: true }))
 // application route
 app.use('/api/v1', RootRoutes)
+// Social Media route
+app.use('/api/v1/bloodMedia', BloodMediaRoutes)
 // test route
 app.get('/', (req: Request, res: Response) => {
   res.status(200).send({ success: true, message: 'server is run.......' })
