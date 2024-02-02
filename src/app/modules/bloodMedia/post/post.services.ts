@@ -70,9 +70,26 @@ const updatePostByIdIntoDB = async (
   })
   return result
 }
+const deletePostByIdFromDB = async (id: string): Promise<Post | null> => {
+  return await prisma.post.delete({ where: { id } })
+}
+
+const myAllPostFromDB = async (userId: string): Promise<Post[]> => {
+  const user = await CheckUserByIdFromDB(userId)
+  if (!user) {
+    throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
+  }
+  return prisma.post.findMany({
+    where: {
+      userId,
+    },
+  })
+}
 export const PostService = {
   insertPostIntoDB,
   retrieveAllPostFromDB,
   getPostByIdFromDB,
   updatePostByIdIntoDB,
+  deletePostByIdFromDB,
+  myAllPostFromDB,
 }
