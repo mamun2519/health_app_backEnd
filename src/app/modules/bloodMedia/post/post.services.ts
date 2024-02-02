@@ -38,7 +38,41 @@ const retrieveAllPostFromDB = async (): Promise<Post[]> => {
     },
   })
 }
+
+const getPostByIdFromDB = async (id: string): Promise<Post | null> => {
+  const post = await prisma.post.findFirst({
+    where: {
+      id: id,
+    },
+  })
+  return post
+}
+const updatePostByIdIntoDB = async (
+  post: Partial<Post>,
+  avatar: Partial<PostAvatar[]>,
+): Promise<Post | null> => {
+  const result = await prisma.$transaction(async transactionClient => {
+    const updatePost = await transactionClient.post.update({
+      where: {
+        id: post.id,
+      },
+      data: post,
+    })
+    if (avatar) {
+      await prisma.postAvatar.updateMany({
+        where: {
+          postId: avatar[0]?.postId,
+        },
+        data: avatar,
+      })
+    }
+    return updatePost
+  })
+  return result
+}
 export const PostService = {
   insertPostIntoDB,
   retrieveAllPostFromDB,
+  getPostByIdFromDB,
+  updatePostByIdIntoDB,
 }

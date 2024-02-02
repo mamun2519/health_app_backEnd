@@ -1,3 +1,3 @@
-"use strict";
+'use strict'
 // import { IErrorMessage } from './error'
-Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, '__esModule', { value: true })
