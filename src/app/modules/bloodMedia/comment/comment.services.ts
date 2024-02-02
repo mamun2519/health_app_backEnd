@@ -1,4 +1,4 @@
-import { PostComment } from '@prisma/client'
+import { PostComment, ReplyComment } from '@prisma/client'
 import prisma from '../../../../prisma/prisma'
 import { CheckUserByIdFromDB } from '../../../../shared/utils'
 import { StatusCodes } from 'http-status-codes'
@@ -51,10 +51,23 @@ const myAllCommentFromDB = async (userId: string): Promise<PostComment[]> => {
   })
 }
 
+const insertReplyCommentIntoDB = async (
+  userId: string,
+  replyComment: ReplyComment,
+): Promise<ReplyComment> => {
+  const user = await CheckUserByIdFromDB(userId)
+  if (!user) {
+    throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
+  }
+  replyComment.userId = userId
+  return await prisma.replyComment.create({ data: replyComment })
+}
+
 export const CommentService = {
   insertCommentIntoDB,
   updateCommentIntoDB,
   deleteCommentByIdFromDB,
   getCommentByIdFromDB,
   myAllCommentFromDB,
+  insertReplyCommentIntoDB,
 }
