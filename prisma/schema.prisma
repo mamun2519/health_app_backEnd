@@ -43,6 +43,8 @@ model User {
   likes            PostLike[]
   comments         PostComment[]
   replyComments    ReplyComment[]
+  friendRequests   FriendRequest[]
+  myFriends        MyFriend[]
 
   @@map("users")
 }
@@ -106,6 +108,8 @@ model Profile {
   education         Education[]
   user_id           String            @unique
   user              User              @relation(fields: [user_id], references: [id])
+  friendRequests    FriendRequest[]
+  MyFriend          MyFriend[]
 
   @@map("user-profiles")
 }
@@ -535,6 +539,37 @@ model ReplyComment {
   replyComment String
 
   @@map("reply_post_comment")
+}
+
+//UserId Means Jeni FrendRequst pataben
+//RequesterId menas jake frendRequst pataicen
+model FriendRequest {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  requesterId String
+  requester   Profile  @relation(fields: [requesterId], references: [id])
+  status      String   @default("Pending")
+  total       Int      @default(0)
+
+  @@map("friend-request")
+}
+
+//UserId Means Jeni FrendRequst pataben
+//friendId menas jar frend hisen
+model MyFriend {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  friendId  String
+  friend    Profile  @relation(fields: [friendId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  total     Int      @default(0)
+
+  @@map("friend")
 }
 
 enum WithdrawEnumStatus {

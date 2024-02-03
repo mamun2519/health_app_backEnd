@@ -1,0 +1,1 @@
+// const friendRequestIntoDB = (data:Friend)
