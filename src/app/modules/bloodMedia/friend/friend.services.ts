@@ -16,6 +16,26 @@ const friendRequestIntoDB = async (
   return await prisma.friendRequest.create({ data })
 }
 
+const friendRequestCancelIntoDB = async (
+  id: string,
+): Promise<FriendRequest | null> => {
+  return await prisma.friendRequest.update({
+    where: { id: id },
+    data: {
+      status: 'Cancel',
+    },
+  })
+}
+const friendRequestCancelFromDB = async (
+  id: string,
+): Promise<FriendRequest | null> => {
+  return await prisma.friendRequest.delete({
+    where: { id: id },
+  })
+}
+
 export const FriendService = {
   friendRequestIntoDB,
+  friendRequestCancelIntoDB,
+  friendRequestCancelFromDB,
 }
