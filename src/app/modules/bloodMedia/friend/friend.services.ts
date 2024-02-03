@@ -26,7 +26,7 @@ const friendRequestCancelIntoDB = async (
     },
   })
 }
-const friendRequestCancelFromDB = async (
+const friendRequestDeleteFromDB = async (
   id: string,
 ): Promise<FriendRequest | null> => {
   return await prisma.friendRequest.delete({
@@ -47,15 +47,35 @@ const friendRequestDetailsFromDB = async (
   })
 }
 // friend service
-const acceptedFriendRequestIntoDB = async (
-  data: MyFriend,
-): Promise<MyFriend> => {
+const acceptedFriendReqIntoDB = async (data: MyFriend): Promise<MyFriend> => {
   return await prisma.myFriend.create({ data })
+}
+const acceptedFriendReqDeleteFromDB = async (
+  id: string,
+): Promise<MyFriend | null> => {
+  return await prisma.myFriend.delete({
+    where: { id: id },
+  })
+}
+const acceptedFriendReqDetailsFromDB = async (
+  id: string,
+): Promise<MyFriend | null> => {
+  return await prisma.myFriend.findFirst({
+    where: { id: id },
+    include: {
+      user: {
+        include: { profile: true },
+      },
+      friend: true,
+    },
+  })
 }
 export const FriendService = {
   friendRequestIntoDB,
   friendRequestCancelIntoDB,
-  friendRequestCancelFromDB,
+  friendRequestDeleteFromDB,
   friendRequestDetailsFromDB,
-  acceptedFriendRequestIntoDB,
+  acceptedFriendReqIntoDB,
+  acceptedFriendReqDeleteFromDB,
+  acceptedFriendReqDetailsFromDB,
 }
