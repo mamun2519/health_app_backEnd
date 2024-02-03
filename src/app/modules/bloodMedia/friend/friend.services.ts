@@ -70,6 +70,24 @@ const acceptedFriendReqDetailsFromDB = async (
     },
   })
 }
+
+const myAllFriendFromDB = async (userId: string): Promise<MyFriend[]> => {
+  const user = await CheckUserByIdFromDB(userId)
+  if (!user) {
+    throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
+  }
+  const profile = await prisma.profile.findFirst({ where: { user_id: userId } })
+  return await prisma.myFriend.findMany({
+    where: {
+      friendId: profile?.id,
+    },
+    include: {
+      user: {
+        include: { profile: true },
+      },
+    },
+  })
+}
 export const FriendService = {
   friendRequestIntoDB,
   friendRequestCancelIntoDB,
@@ -78,4 +96,5 @@ export const FriendService = {
   acceptedFriendReqIntoDB,
   acceptedFriendReqDeleteFromDB,
   acceptedFriendReqDetailsFromDB,
+  myAllFriendFromDB,
 }
