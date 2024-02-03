@@ -1,6 +1,7 @@
 import express from 'express'
 import { PostRoute } from '../modules/bloodMedia/post/post.route'
 import { CommentRoute } from '../modules/bloodMedia/comment/comment.route'
+import { FriendRoute } from '../modules/bloodMedia/friend/friend.route'
 
 const router = express.Router()
 
@@ -12,6 +13,10 @@ const allModulesRoutes = [
   {
     path: '/post/comment',
     route: CommentRoute,
+  },
+  {
+    path: '/friend',
+    route: FriendRoute,
   },
 ]
 
