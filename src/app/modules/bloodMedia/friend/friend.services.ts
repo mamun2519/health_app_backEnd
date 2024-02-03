@@ -1,4 +1,4 @@
-import { FriendRequest } from '@prisma/client'
+import { FriendRequest, MyFriend } from '@prisma/client'
 import { CheckUserByIdFromDB } from '../../../../shared/utils'
 import Send_API_Error from '../../../../error/apiError'
 import { StatusCodes } from 'http-status-codes'
@@ -33,9 +33,29 @@ const friendRequestCancelFromDB = async (
     where: { id: id },
   })
 }
-
+const friendRequestDetailsFromDB = async (
+  id: string,
+): Promise<FriendRequest | null> => {
+  return await prisma.friendRequest.findFirst({
+    where: { id: id },
+    include: {
+      user: {
+        include: { profile: true },
+      },
+      requester: true,
+    },
+  })
+}
+// friend service
+const acceptedFriendRequestIntoDB = async (
+  data: MyFriend,
+): Promise<MyFriend> => {
+  return await prisma.myFriend.create({ data })
+}
 export const FriendService = {
   friendRequestIntoDB,
   friendRequestCancelIntoDB,
   friendRequestCancelFromDB,
+  friendRequestDetailsFromDB,
+  acceptedFriendRequestIntoDB,
 }
