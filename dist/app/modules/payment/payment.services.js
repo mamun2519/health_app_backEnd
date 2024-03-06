@@ -223,7 +223,6 @@ const OrderAppointment = (appointment, payment, authUserId) => __awaiter(void 0,
     };
 });
 const paymentByStripe = (price) => __awaiter(void 0, void 0, void 0, function* () {
-    // Create a PaymentIntent with the order amount and currency
     console.log('price', price);
     const paymentIntent = yield stripe.paymentIntents.create({
         amount: Number(price),
@@ -233,7 +232,6 @@ const paymentByStripe = (price) => __awaiter(void 0, void 0, void 0, function* (
             enabled: true,
         },
     });
-    console.log(paymentIntent);
     return {
         clientSecret: paymentIntent.client_secret,
     };
