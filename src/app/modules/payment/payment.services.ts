@@ -243,7 +243,6 @@ const OrderAppointment = async (
 }
 
 const paymentByStripe = async (price: number) => {
-  // Create a PaymentIntent with the order amount and currency
   console.log('price', price)
   const paymentIntent = await stripe.paymentIntents.create({
     amount: Number(price),
@@ -253,7 +252,6 @@ const paymentByStripe = async (price: number) => {
       enabled: true,
     },
   })
-  console.log(paymentIntent)
 
   return {
     clientSecret: paymentIntent.client_secret,
