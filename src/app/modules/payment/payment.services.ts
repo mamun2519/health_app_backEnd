@@ -222,7 +222,7 @@ const createCompanyBalance = async (
 ): Promise<CompanyBalance> => {
   return await prisma.companyBalance.create({ data })
 }
-
+//
 const OrderAppointment = async (
   appointment: Appointment,
   payment: Payment,
