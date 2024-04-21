@@ -211,6 +211,7 @@ const deleteByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () 
 const createCompanyBalance = (data) => __awaiter(void 0, void 0, void 0, function* () {
     return yield prisma_1.default.companyBalance.create({ data });
 });
+//
 const OrderAppointment = (appointment, payment, authUserId) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield prisma_1.default.user.findFirst({ where: { id: authUserId } });
     if (!user) {
