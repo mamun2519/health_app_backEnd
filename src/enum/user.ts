@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-// user role----------
+// user role--------------
 export enum USER_ROLE {
   USER = 'User',
   DOCTOR = 'Doctor',
