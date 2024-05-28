@@ -56,7 +56,7 @@ const updateByIdIntoDB = catchAsync(async (req: Request, res: Response) => {
 })
 const bloodDonorRequest = catchAsync(async (req: Request, res: Response) => {
   const user = (req as JwtPayload).user
-  console.log(user)
+
   const result = await UserService.bloodDonorRequest(user.user_id, req.body)
   sendApiResponse(res, {
     statusCode: StatusCodes.OK,

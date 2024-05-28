@@ -489,7 +489,6 @@ const filtersDoctorFromDB = async (
 ): Promise<IFilterResponse<User[]>> => {
   const { district, experience, specialist } = filters
 
-  console.log(filters)
   const { skip, limit, page } = calculatePagination(pagination)
 
   const whereConditions: Prisma.UserWhereInput = {
