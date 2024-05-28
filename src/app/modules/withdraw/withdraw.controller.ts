@@ -26,7 +26,7 @@ const doctorWithDrawRequest = catchAsync(
 
 const withdrawAccepted = catchAsync(async (req: Request, res: Response) => {
   const user = (req as JwtPayload).user
-  console.log('body', req.body)
+
   const result = await WithdrawServices.withdrawAccepted(
     user.user_id,
     req.body.data,

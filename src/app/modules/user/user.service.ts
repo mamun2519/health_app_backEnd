@@ -731,8 +731,6 @@ const updateUserProfile = async (
       },
     })
 
-    console.log(profiles)
-
     const allreadyExist = await prisma.presentAddress.findFirst({
       where: {
         profile_Id: user.profile?.id,
