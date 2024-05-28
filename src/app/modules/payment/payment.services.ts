@@ -24,7 +24,6 @@ const createPayment = async (
   authUserId: string,
   data: Payment,
 ): Promise<Payment> => {
-  console.log(data)
   const user = await prisma.user.findFirst({ where: { id: authUserId } })
   if (!user) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
@@ -40,7 +39,7 @@ const createPayment = async (
   })
 
   const newBalance = Number(doctor?.balance) + Number(data.price)
-  console.log(data)
+
   data.userId = authUserId
   data.price = Number(data.price)
   const result = await prisma.$transaction(async transactionClient => {
@@ -67,7 +66,7 @@ const getAllFromDB = async (
 ): Promise<IFilterResponse<Payment[]>> => {
   const { page, limit, skip } = calculatePagination(options)
   const { searchTerm, ...filterData } = filters
-  console.log(options)
+
   const andConditions = []
   if (searchTerm) {
     andConditions.push({
@@ -212,7 +211,6 @@ const deleteByIdFromDB = async (id: string): Promise<Payment | null> => {
       },
     },
   })
-  console.log(result)
 
   return result
 }
@@ -243,7 +241,6 @@ const OrderAppointment = async (
 }
 
 const paymentByStripe = async (price: number) => {
-  console.log('price', price)
   const paymentIntent = await stripe.paymentIntents.create({
     amount: Number(price),
     currency: 'usd',

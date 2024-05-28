@@ -68,7 +68,6 @@ const createCompanyBalance = catchAsync(async (req: Request, res: Response) => {
 })
 
 const OrderAppointment = catchAsync(async (req: Request, res: Response) => {
-  console.log(req.body)
   const user = (req as JwtPayload).user
   const result = await PaymentService.OrderAppointment(
     req.body.appointment,

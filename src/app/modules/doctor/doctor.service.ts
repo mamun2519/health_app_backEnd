@@ -435,7 +435,6 @@ const myActiveGoogleMeetService = async (
   })
 }
 const activeMeet = async (id: string): Promise<GoogleMeet | null> => {
-  console.log(id)
   return await prisma.googleMeet.findFirst({
     where: {
       status: 'Active',
@@ -504,7 +503,6 @@ const myGoogleMeet = async (
   authUserId: string,
   options: IPagination,
 ): Promise<IFilterResponse<GoogleMeet[]>> => {
-  console.log(authUserId)
   const { skip, limit, page } = calculatePagination(options)
   const doctor = await prisma.doctor.findFirst({
     where: {
@@ -534,7 +532,7 @@ const myGoogleMeet = async (
             createdAt: 'desc',
           },
   })
-  console.log(result)
+
   const total = await prisma.googleMeet.count({
     where: {
       doctorId: authUserId,
@@ -801,7 +799,6 @@ const myPrescription = async (
   authUserId: string,
   options: IPagination,
 ): Promise<IFilterResponse<Prescription[]>> => {
-  console.log(authUserId)
   const { skip, limit, page } = calculatePagination(options)
   const doctor = await prisma.doctor.findFirst({
     where: {
@@ -811,7 +808,6 @@ const myPrescription = async (
   if (!doctor) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'Doctor Not found')
   }
-  console.log(doctor)
 
   const result = await prisma.prescription.findMany({
     skip,

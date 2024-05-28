@@ -30,7 +30,6 @@ export function matchSlatTime(
   }))
 }
 
-// console.log(date)
 export const currentDate = (): string => {
   const currentDate = new Date()
   const currentYear = currentDate.getFullYear()
@@ -43,5 +42,4 @@ export const currentDate = (): string => {
     .padStart(2, '0')}-${currentDay.toString().padStart(2, '0')}`
 
   return formattedDate
-  console.log(formattedDate)
 }

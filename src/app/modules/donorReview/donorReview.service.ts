@@ -13,7 +13,7 @@ const createDonorReviewIntoDB = async (
       user_id: authUserId,
     },
   })
-  console.log(payload)
+
   if (!user) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User not found')
   }
