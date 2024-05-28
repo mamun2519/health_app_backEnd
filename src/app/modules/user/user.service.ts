@@ -705,10 +705,8 @@ const updateUserProfile = async (
   authUserId: string,
   data: IUpdateUser,
 ): Promise<Profile | null> => {
-  console.log(data)
   const { address, profile } = data
 
-  console.log('profile', profile)
   const user = await prisma.user.findFirst({
     where: { id: authUserId },
     include: { profile: true },
