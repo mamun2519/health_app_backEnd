@@ -297,7 +297,6 @@ const createDoctorFromDB = async (
 const userLoginIntoDB = async (
   data: ILoginData,
 ): Promise<IUserResponse | null> => {
-  console.log(data)
   let user
   if (data.email) {
     user = await checkUser(data.email as string)
@@ -426,7 +425,6 @@ const changeUserNameIntoDB = async (
 const requestForgetPassword = async (data: {
   email: string
 }): Promise<{ sendMessage: string; stepNo: number }> => {
-  console.log(data.email)
   const isExistUser = await checkUser(data?.email as string)
   if (!isExistUser) {
     throw new Send_API_Error(
@@ -453,7 +451,6 @@ const requestForgetPassword = async (data: {
       pass: env_config.emailPassword,
     },
   })
-  // console.log(data.email)
 
   const resetCode = Math.floor(1000 + Math.random() * 9000).toString()
 
@@ -481,7 +478,7 @@ const requestForgetPassword = async (data: {
       <p>Health Care Team </p>
       </div>`,
   }
-  console.log(mailOptions)
+
   transporter.sendMail(mailOptions, function (error: any) {
     if (error) {
       throw new Send_API_Error(StatusCodes.BAD_REQUEST, 'Error sending email')

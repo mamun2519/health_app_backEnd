@@ -13,7 +13,7 @@ import { ServicerAbleFiled } from './doctor.interface'
 const createServiceIntoDB = catchAsync(async (req: Request, res: Response) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const user = (req as any).user
-  console.log(user)
+
   const result = await Doctor.createServiceIntoDB(req.body, user.user_id)
   sendApiResponse(res, {
     success: true,
@@ -52,7 +52,6 @@ const getAllFromDB = catchAsync(async (req: Request, res: Response) => {
   })
 })
 const getByIdFromDB = catchAsync(async (req: Request, res: Response) => {
-  console.log('query', req.query.date)
   const result = await Doctor.getByIdFromDB(
     req.params.id,
     req.query.date as string,
@@ -109,7 +108,6 @@ const myActiveGoogleMeetService = catchAsync(
   },
 )
 const activeMeet = catchAsync(async (req: Request, res: Response) => {
-  console.log(req.params)
   const result = await Doctor.activeMeet(req.params.id)
   sendApiResponse(res, {
     success: true,

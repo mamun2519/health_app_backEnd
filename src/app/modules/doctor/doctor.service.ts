@@ -50,7 +50,7 @@ const createServiceIntoDB = async (
       data.salt.endTime,
       Number(data.salt.duration),
     )
-    console.log(DoctorSlat)
+
     data.salt.serviceId = DocService.id
     await transactionClient.serviceSalt.create({
       data: {
@@ -71,7 +71,6 @@ const getAllFromDB = async (
   filters: IDoctorServiceFilter,
   options: IPagination,
 ): Promise<IFilterResponse<DoctorService[]>> => {
-  console.log(filters)
   const { page, limit, skip } = calculatePagination(options)
   const { searchTerm, ...filterData } = filters
   const andConditions = []
@@ -291,7 +290,6 @@ const updateByIdIntoDB = async (
   id: string,
   data: Partial<ICreatedDoctorServiceData>,
 ): Promise<{ message: string }> => {
-  console.log(data)
   const doctorServices = await prisma.doctorService.findFirst({
     where: { id },
     include: {

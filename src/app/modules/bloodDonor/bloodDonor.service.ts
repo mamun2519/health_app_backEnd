@@ -25,7 +25,6 @@ const filtersBloodDonorFromDB = async (
 ): Promise<IFilterResponse<PresentAddress[]>> => {
   const { district, blood_group, searchTerm, sub_district } = filters
 
-  console.log(filters)
   const { skip, limit, page } = calculatePagination(pagination)
 
   const whereConditions: Prisma.PresentAddressWhereInput = {
@@ -212,7 +211,7 @@ const AllDonorRequest = async (
 ): Promise<IFilterResponse<DonorRequest[]>> => {
   const { page, skip, limit } = calculatePagination(pagination)
   const { searchTerm, ...filterData } = filters
-  console.log(searchTerm)
+
   const andConditions = []
   if (searchTerm) {
     andConditions.push({
