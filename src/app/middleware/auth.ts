@@ -9,7 +9,6 @@ export const auth =
   (...userRole: string[]) =>
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log(req.headers.authorization)
       const token = req.headers.authorization
       if (!token) {
         throw new Send_API_Error(
