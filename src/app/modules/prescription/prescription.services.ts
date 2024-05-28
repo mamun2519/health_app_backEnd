@@ -18,7 +18,7 @@ const insetIntoDB = async (
   authUserId: string,
 ): Promise<Prescription> => {
   const { prescription, haltReport, medicine } = data
-  console.log(prescription)
+
   const doctor = await prisma.doctor.findFirst({
     where: { user_id: authUserId },
   })
@@ -37,7 +37,7 @@ const insetIntoDB = async (
   if (!appointment) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'appointment not found')
   }
-  console.log(appointment.doctorId)
+
   const result = await prisma.$transaction(async transactionClient => {
     // prescription.userId = appointment.userId
 
@@ -52,7 +52,6 @@ const insetIntoDB = async (
       },
     })
 
-    console.log(userPrescription)
     if (medicine) {
       for (let i = 0; i < medicine.length; i++) {
         await transactionClient.medicine.create({
@@ -200,7 +199,7 @@ const updateByIdIntoDB = async (
   data: any,
 ): Promise<Prescription | null> => {
   const { prescription, haltReport, medicine } = data
-  console.log(data)
+
   const result = await prisma.prescription.update({
     where: { id },
     data: prescription,

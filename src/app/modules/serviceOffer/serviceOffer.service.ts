@@ -13,7 +13,6 @@ const insetIntoDB = async (
   data: ServiceOffer,
   authUserId: string,
 ): Promise<ServiceOffer> => {
-  console.log(data)
   const user = await prisma.user.findFirst({
     where: {
       id: authUserId,
@@ -172,24 +171,21 @@ const doctorOfferService = async (
 }
 
 const createCart = async (authUserId: string, data: Cart): Promise<Cart> => {
-  console.log(data)
   const user = await prisma.user.findFirst({ where: { id: authUserId } })
   if (!user) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
   }
-  console.log(user)
+
   data.userId = authUserId
   const result = await prisma.cart.create({ data })
 
   return result
 }
 const MyCart = async (authUserId: string): Promise<Cart[]> => {
-  console.log(authUserId)
   const user = await prisma.user.findFirst({ where: { id: authUserId } })
   if (!user) {
     throw new Send_API_Error(StatusCodes.NOT_FOUND, 'User Not Found')
   }
-  console.log(user)
 
   const result = await prisma.cart.findMany({
     where: {
@@ -199,7 +195,6 @@ const MyCart = async (authUserId: string): Promise<Cart[]> => {
       service: true,
     },
   })
-  console.log(user)
 
   return result
 }

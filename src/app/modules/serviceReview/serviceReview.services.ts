@@ -7,7 +7,6 @@ const insetIntoDB = async (
   authUserId: string,
   data: ServiceReview,
 ): Promise<ServiceReview> => {
-  console.log(data)
   const user = await prisma.user.findFirst({
     where: { id: authUserId },
     include: { profile: true },
@@ -69,7 +68,6 @@ const deleteByIdFromDB = async (id: string): Promise<ServiceReview | null> => {
 }
 
 const getServiceWithReview = async (id: string): Promise<ServiceReview[]> => {
-  console.log('id-', id)
   const result = await prisma.serviceReview.findMany({
     where: { serviceId: id },
     include: {

@@ -83,7 +83,7 @@ const doctorOfferService = catchAsync(async (req: Request, res: Response) => {
 
 const addToCart = catchAsync(async (req: Request, res: Response) => {
   const user = (req as JwtPayload).user
-  console.log(user)
+
   // const options = receiveArrayAndReturnObject(req.query, paginationFiled)
   const result = await ServiceOfferService.createCart(user.user_id, req.body)
   sendApiResponse(res, {
