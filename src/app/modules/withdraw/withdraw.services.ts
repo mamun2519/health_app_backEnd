@@ -162,7 +162,6 @@ const withdrawAccepted = async (
     status: WithdrawEnumStatus
   },
 ): Promise<Withdraw> => {
-  console.log('data', data)
   const user = await prisma.user.findFirst({
     where: {
       id: authUserId,
