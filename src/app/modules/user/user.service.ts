@@ -551,7 +551,6 @@ const userProfile = async (user: {
   role: string
   user_id: string
 }): Promise<User | BloodDonor | Doctor | null> => {
-  console.log(user.role)
   if (user.role === UserRole.User) {
     return await prisma.user.findFirst({
       where: {
@@ -655,7 +654,6 @@ const AllUserFromDb = async (options: IPagination): Promise<User[]> => {
   return result
 }
 const AllAdminFromDB = async (options: IPagination): Promise<User[]> => {
-  console.log(options)
   const { limit, skip } = calculatePagination(options)
   const result = await prisma.user.findMany({
     skip,
@@ -707,7 +705,6 @@ const updateUserProfile = async (
   authUserId: string,
   data: IUpdateUser,
 ): Promise<Profile | null> => {
-  console.log('id', authUserId)
   console.log(data)
   const { address, profile } = data
 
