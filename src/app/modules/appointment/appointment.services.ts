@@ -76,7 +76,7 @@ const getAllFromDB = async (
   options: IPagination,
 ): Promise<IFilterResponse<Appointment[]>> => {
   const { searchTerm, ...filterData } = filter
-  console.log(searchTerm)
+
   const { page, limit, skip } = calculatePagination(options)
   const andCondition: any[] = []
   if (searchTerm) {
@@ -165,7 +165,6 @@ const updateByIdIntoDB = async (
   id: string,
   data: Partial<Appointment>,
 ): Promise<Appointment | null> => {
-  console.log(data)
   if (data.status == 'Reject' || data.status === 'Cancel') {
     const result = await prisma.appointment.update({
       where: { id },

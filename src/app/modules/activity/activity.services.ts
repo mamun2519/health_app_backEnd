@@ -62,7 +62,7 @@ const userActivity = async (id: string): Promise<IUserActivity> => {
   }
 
   const myDonarRequest = await MyDonarRequest(user.id as string)
-  console.log(myDonarRequest)
+
   return {
     bookingAppointment: appointment,
     donorRequest,

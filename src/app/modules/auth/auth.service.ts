@@ -109,7 +109,7 @@ const createBloodDonorFromDB = async (
     present_Address,
     ...profileData
   } = data
-  console.log(data)
+
   const isExistDonor = await checkUser(email)
 
   if (isExistDonor) {
@@ -201,10 +201,9 @@ const createDoctorFromDB = async (
     experience,
     ...profileData
   } = data
-  console.log(data)
+
   const isExistDoctor = await checkUser(email)
-  console.log('email', email)
-  console.log(isExistDoctor)
+
   if (isExistDoctor) {
     throw new Send_API_Error(StatusCodes.BAD_REQUEST, 'User Already exist!')
   }

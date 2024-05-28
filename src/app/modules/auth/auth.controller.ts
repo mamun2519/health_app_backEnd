@@ -7,7 +7,7 @@ import { StatusCodes } from 'http-status-codes'
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
   const result = await AuthService.createUserFromDB(req.body)
-  console.log(result)
+
   const { user, token } = result
   //set refresh token into cookie
   const cookieOptions = {
