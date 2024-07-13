@@ -46,7 +46,7 @@ app.get(
         'https://jsonplaceholder.typicode.com/photos',
       )
       //* set to redis
-      await client.set('post', JSON.stringify(result.data))
+      await client.set('post', JSON.stringify(result.data), { EX: 60 })
 
       //* retune user
       res.status(200).json({
