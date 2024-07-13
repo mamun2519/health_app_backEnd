@@ -43,7 +43,7 @@ app.get(
           data: JSON.parse(cachingData),
         })
       }
-
+      //  get data to json pleace holder server
       const result = await axios.get(
         'https://jsonplaceholder.typicode.com/photos',
       )
