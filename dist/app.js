@@ -44,7 +44,7 @@ app.get('/test-caching', (req, res, next) => __awaiter(void 0, void 0, void 0, f
     try {
         //* get data to redis server
         const cachingData = yield server_1.client.get('post');
-        //* if data have
+        // //* if data have
         if (cachingData) {
             res.status(200).json({
                 success: true,
@@ -52,7 +52,7 @@ app.get('/test-caching', (req, res, next) => __awaiter(void 0, void 0, void 0, f
                 data: JSON.parse(cachingData),
             });
         }
-        //  get data to json pleace holder server
+        // //  get data to json pleace holder server
         const result = yield axios_1.default.get('https://jsonplaceholder.typicode.com/photos');
         //* set to redis
         yield server_1.client.set('post', JSON.stringify(result.data), { EX: 60 });
