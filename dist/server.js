@@ -19,12 +19,15 @@ const http_1 = __importDefault(require("http"));
 const server = http_1.default.createServer(app_1.default);
 const redis_1 = require("redis");
 //* connect to redis for cashing
+// export const client = createClient({
+//   password: 'dxqQXmpYRA9nKjKI65ovxZpYD1p2fX9Y',
+//   socket: {
+//     host: 'redis-12744.c323.us-east-1-2.ec2.redns.redis-cloud.com',
+//     port: 12744,
+//   },
+// })
 exports.client = (0, redis_1.createClient)({
-    password: 'dxqQXmpYRA9nKjKI65ovxZpYD1p2fX9Y',
-    socket: {
-        host: 'redis-12744.c323.us-east-1-2.ec2.redns.redis-cloud.com',
-        port: 12744,
-    },
+    url: 'redis://default:dxqQXmpYRA9nKjKI65ovxZpYD1p2fX9Y@redis-12744.c323.us-east-1-2.ec2.redns.redis-cloud.com:12744',
 });
 //handle success message
 exports.client.on('connect', () => {

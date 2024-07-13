@@ -47,15 +47,17 @@ app.get(
       const result = await axios.get(
         'https://jsonplaceholder.typicode.com/photos',
       )
-      //* set to redis
-      await client.set('post', JSON.stringify(result.data), { EX: 60 })
-      // await client.del('post')
-      //* retune user
-      res.status(200).json({
-        success: true,
-        message: 'data get for json json placeholder server',
-        data: result.data,
-      })
+      if (result) {
+        //* set to redis
+        await client.set('post', JSON.stringify(result.data), { EX: 60 })
+        // await client.del('post')
+        //* retune user
+        res.status(200).json({
+          success: true,
+          message: 'data get for json json placeholder server',
+          data: result.data,
+        })
+      }
     } catch (err) {
       next(err)
     }
