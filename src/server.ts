@@ -2,13 +2,18 @@ import app from './app'
 import { env_config } from './config'
 import http from 'http'
 const server: http.Server = http.createServer(app)
-import redis from 'redis'
+import { createClient } from 'redis'
 //* connect to redis for cashing
 
-export const client = redis.createClient()
-client.on('connect', () => console.log('Redis Connect Successfully'))
-client.on('error', error => console.log('Redis Error---', error))
+const client = createClient()
 
+client.on('connect', () => {
+  console.log('Connected to Redis')
+})
+
+client.on('error', err => {
+  console.log('Redis error: ', err)
+})
 async function bootstrap() {
   // const server: Server = app.listen(env_config.port, () =>
   //   console.log(`server running on post ${env_config.port}`),
@@ -17,7 +22,7 @@ async function bootstrap() {
   server.listen(env_config.port, () =>
     console.log(`server running on post ${env_config.port}`),
   )
-
+  await client.connect()
   const existHandler = () => {
     if (server) {
       server.close(() => {
