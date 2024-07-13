@@ -34,6 +34,7 @@ app.get(
     try {
       //* get data to redis server
       const cachingData = await client.get('post')
+
       if (cachingData) {
         res.status(200).json({
           success: true,
@@ -47,7 +48,7 @@ app.get(
       )
       //* set to redis
       await client.set('post', JSON.stringify(result.data), { EX: 60 })
-
+      // await client.del('post')
       //* retune user
       res.status(200).json({
         success: true,
