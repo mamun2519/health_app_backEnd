@@ -72,10 +72,12 @@ const getAllFromDB = async (
   filters: IDoctorServiceFilter,
   options: IPagination,
 ): Promise<IFilterResponse<DoctorService[] | string> | string> => {
-  //add to caching
+  console.log(filters)
+  //*add to caching
   const cachingData = await client.get('doctor-services')
-  if (cachingData) {
-    return cachingData
+
+  if (cachingData && !Object.keys(filters).length) {
+    return JSON.parse(cachingData)
   }
   const { page, limit, skip } = calculatePagination(options)
   const { searchTerm, ...filterData } = filters
@@ -129,7 +131,7 @@ const getAllFromDB = async (
           createdAt: 'desc',
         },
   })
-  await client.set('post', JSON.stringify(result), { EX: 60 })
+  await client.set('doctor-services', JSON.stringify(result), { EX: 60 })
   const total = await prisma.doctorService.count({ where: whereConditions })
 
   return {
