@@ -35,7 +35,7 @@ app.get(
       //* get data to redis server
       const cachingData = await client.get('post')
 
-      //* if data have
+      // //* if data have
       if (cachingData) {
         res.status(200).json({
           success: true,
@@ -43,7 +43,7 @@ app.get(
           data: JSON.parse(cachingData),
         })
       }
-      //  get data to json pleace holder server
+      // //  get data to json pleace holder server
       const result = await axios.get(
         'https://jsonplaceholder.typicode.com/photos',
       )
