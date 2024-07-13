@@ -46,7 +46,7 @@ app.get(
       )
 
       await client.set('post', result.data)
-      console.log(result.data)
+
       res.status(200).json({
         success: true,
         message: 'data get for json json placeholder server',
