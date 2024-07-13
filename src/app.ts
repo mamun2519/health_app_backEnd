@@ -32,21 +32,23 @@ app.get(
   '/test-caching',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      //* get data to redis server
       const cachingData = await client.get('post')
       if (cachingData) {
         res.status(200).json({
           success: true,
           message: 'data get for redis server caching',
-          data: cachingData,
+          data: JSON.parse(cachingData),
         })
       }
 
       const result = await axios.get(
         'https://jsonplaceholder.typicode.com/photos',
       )
+      //* set to redis
+      await client.set('post', JSON.stringify(result.data))
 
-      await client.set('post', result.data)
-
+      //* retune user
       res.status(200).json({
         success: true,
         message: 'data get for json json placeholder server',
