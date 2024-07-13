@@ -72,7 +72,6 @@ const getAllFromDB = async (
   filters: IDoctorServiceFilter,
   options: IPagination,
 ): Promise<IFilterResponse<DoctorService[] | string> | string> => {
-  console.log(filters)
   //*add to caching
   const cachingData = await client.get('doctor-services')
 
