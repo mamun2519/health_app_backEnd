@@ -4,7 +4,13 @@ import http from 'http'
 const server: http.Server = http.createServer(app)
 import { createClient } from 'redis'
 //* connect to redis for cashing
-export const client = createClient()
+export const client = createClient({
+  password: 'dxqQXmpYRA9nKjKI65ovxZpYD1p2fX9Y',
+  socket: {
+    host: 'redis-12744.c323.us-east-1-2.ec2.redns.redis-cloud.com',
+    port: 12744,
+  },
+})
 
 //handle success message
 client.on('connect', () => {
