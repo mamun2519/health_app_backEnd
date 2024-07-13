@@ -49,7 +49,7 @@ app.get(
       )
       if (result) {
         //* set to redis
-        await client.set('post', JSON.stringify(result.data), { EX: 60 })
+
         // await client.del('post')
         //* retune user
         res.status(200).json({
@@ -57,6 +57,7 @@ app.get(
           message: 'data get for json json placeholder server',
           data: result.data,
         })
+        await client.set('post', JSON.stringify(result.data), { EX: 60 })
       }
     } catch (err) {
       next(err)
