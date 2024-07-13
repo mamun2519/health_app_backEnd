@@ -53,6 +53,7 @@
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.7",
     "nodemailer-mailgun-transport": "^2.1.5",
+    "redis": "^4.6.15",
     "socket.io": "^4.7.2",
     "stripe": "^14.2.0",
     "ts-node-dev": "^2.0.0",

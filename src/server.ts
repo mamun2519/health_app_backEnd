@@ -1,9 +1,11 @@
 import app from './app'
 import { env_config } from './config'
-
 import http from 'http'
-
 const server: http.Server = http.createServer(app)
+import redis from 'redis'
+//* connect to redis for cashing
+
+export const client = redis.createClient()
 
 async function bootstrap() {
   // const server: Server = app.listen(env_config.port, () =>
