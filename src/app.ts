@@ -45,10 +45,13 @@ app.get(
         'https://jsonplaceholder.typicode.com/photos',
       )
 
+      await client.set('post', result.data)
       console.log(result.data)
-      res
-        .status(200)
-        .json({ success: true, message: 'data get', data: result.data })
+      res.status(200).json({
+        success: true,
+        message: 'data get for json json placeholder server',
+        data: result.data,
+      })
     } catch (err) {
       next(err)
     }
