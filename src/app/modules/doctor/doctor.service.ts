@@ -22,6 +22,7 @@ import { IPagination } from '../../../interface/pagination'
 import { calculatePagination } from '../../../helper/paginationHalper'
 import { doctorServiceSearchAbleFiled } from './doctor.constant'
 import { IFilterResponse } from '../../../interface/userFilteResponse'
+import { client } from '../../../server'
 
 const createServiceIntoDB = async (
   data: ICreatedDoctorServiceData,
@@ -70,7 +71,12 @@ const createServiceIntoDB = async (
 const getAllFromDB = async (
   filters: IDoctorServiceFilter,
   options: IPagination,
-): Promise<IFilterResponse<DoctorService[]>> => {
+): Promise<IFilterResponse<DoctorService[] | string> | string> => {
+  //add to caching
+  const cachingData = await client.get('doctor-services')
+  if (cachingData) {
+    return cachingData
+  }
   const { page, limit, skip } = calculatePagination(options)
   const { searchTerm, ...filterData } = filters
   const andConditions = []
@@ -123,6 +129,7 @@ const getAllFromDB = async (
           createdAt: 'desc',
         },
   })
+  await client.set('post', JSON.stringify(result), { EX: 60 })
   const total = await prisma.doctorService.count({ where: whereConditions })
 
   return {
