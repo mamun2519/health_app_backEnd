@@ -6,6 +6,8 @@ import redis from 'redis'
 //* connect to redis for cashing
 
 export const client = redis.createClient()
+client.on('connect', () => console.log('Redis Connect Successfully'))
+client.on('error', error => console.log('Redis Error---', error))
 
 async function bootstrap() {
   // const server: Server = app.listen(env_config.port, () =>
