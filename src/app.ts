@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import globalErrorHandler from './app/middleware/globalErrorHandler'
 import { RootRoutes } from './app/routes'
 import axios from 'axios'
+import { client } from './server'
 //root Application----
 const app: Application = express()
 
@@ -22,7 +23,7 @@ app.use('/api/v1', RootRoutes)
 // app.use('/api/v1/bloodMedia', BloodMediaRoutes)
 // test route
 app.get('/', (req: Request, res: Response) => {
-  res.status(200).send({ success: true, message: 'server is run.......' })
+  res.status(200).json({ success: true, message: 'server is run.......' })
 })
 // Global Error Handler
 app.use(globalErrorHandler)
@@ -31,7 +32,23 @@ app.get(
   '/test-caching',
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      await axios.get('https://jsonplaceholder.typicode.com/photos')
+      const cachingData = await client.get('post')
+      if (cachingData) {
+        res.status(200).json({
+          success: true,
+          message: 'data get for redis server caching',
+          data: cachingData,
+        })
+      }
+
+      const result = await axios.get(
+        'https://jsonplaceholder.typicode.com/photos',
+      )
+
+      console.log(result.data)
+      res
+        .status(200)
+        .json({ success: true, message: 'data get', data: result.data })
     } catch (err) {
       next(err)
     }

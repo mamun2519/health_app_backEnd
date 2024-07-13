@@ -4,7 +4,7 @@ import http from 'http'
 const server: http.Server = http.createServer(app)
 import { createClient } from 'redis'
 //* connect to redis for cashing
-const client = createClient()
+export const client = createClient()
 
 //handle success message
 client.on('connect', () => {
