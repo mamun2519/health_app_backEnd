@@ -3,7 +3,7 @@ import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import globalErrorHandler from './app/middleware/globalErrorHandler'
 import { RootRoutes } from './app/routes'
-
+import axios from 'axios'
 //root Application----
 const app: Application = express()
 
@@ -26,7 +26,17 @@ app.get('/', (req: Request, res: Response) => {
 })
 // Global Error Handler
 app.use(globalErrorHandler)
-
+//* test caching
+app.get(
+  '/test-caching',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await axios.get('https://jsonplaceholder.typicode.com/photos')
+    } catch (err) {
+      next(err)
+    }
+  },
+)
 // handle not found route
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(404).json({
