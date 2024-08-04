@@ -34,7 +34,7 @@ async function bootstrap() {
     console.log(`server running on post ${env_config.port}`),
   )
 
-  //* connect to redis server
+  //* connect to redis server-
   await client.connect()
   const existHandler = () => {
     if (server) {

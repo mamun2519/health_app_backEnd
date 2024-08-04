@@ -66,7 +66,7 @@ app.use(globalErrorHandler)
 //     }
 //   },
 // )
-// handle not found route
+// handle not found route--
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(404).json({
     success: false,
