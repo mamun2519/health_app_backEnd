@@ -25,6 +25,7 @@ import { calculatePagination } from '../../../helper/paginationHalper'
 import { IFilterResponse } from '../../../interface/userFilteResponse'
 import { UserSearchAbleFiled } from './user.constant'
 
+//* get all user
 const getAllFromDB = async (
   filters: IUserFilter,
   options: IPagination,
