@@ -53,7 +53,7 @@ const getAllFromDB = async (
       })),
     })
   }
-
+  //* where condition
   const whereConditions: Prisma.UserWhereInput =
     andConditions.length > 0 ? { AND: andConditions } : {}
   const result = await prisma.user.findMany({
