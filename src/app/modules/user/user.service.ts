@@ -96,6 +96,7 @@ const getAllFromDB = async (
   }
 }
 
+//* get by user
 const getByIdFromDB = async (id: string): Promise<User | null> => {
   return await prisma.user.findFirst({
     where: { id },
