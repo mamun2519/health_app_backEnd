@@ -23,7 +23,9 @@ app.use('/api/v1', RootRoutes)
 // app.use('/api/v1/bloodMedia', BloodMediaRoutes)
 // test route
 app.get('/', (req: Request, res: Response) => {
-  res.status(200).json({ success: true, message: 'server is run.......' })
+  res
+    .status(200)
+    .json({ success: true, message: 'server is run successfully.......' })
 })
 // Global Error Handler
 app.use(globalErrorHandler)
