@@ -25,7 +25,7 @@ app.use('/api/v1', RootRoutes)
 app.get('/', (req: Request, res: Response) => {
   res
     .status(200)
-    .json({ success: true, message: 'server is run successfully.......' })
+    .json({ success: true, message: 'server is run successfully........' })
 })
 // Global Error Handler
 app.use(globalErrorHandler)
