@@ -8,7 +8,7 @@ import { RootRoutes } from './app/routes'
 //root Application----
 const app: Application = express()
 
-//middleware
+//*middleware
 app.use([
   express.json(),
   express.urlencoded({ extended: true }),
