@@ -16,15 +16,15 @@ export const client = createClient({
   url: 'redis://default:dxqQXmpYRA9nKjKI65ovxZpYD1p2fX9Y@redis-12744.c323.us-east-1-2.ec2.redns.redis-cloud.com:12744',
 })
 
-//handle success message
-client.on('connect', () => {
-  console.log('Connected to Redis')
-})
+// //handle success message
+// client.on('connect', () => {
+//   console.log('Connected to Redis')
+// })
 
-// handle error message
-client.on('error', err => {
-  console.log('Redis error: ', err)
-})
+// // handle error message
+// client.on('error', err => {
+//   console.log('Redis error: ', err)
+// })
 async function bootstrap() {
   // const server: Server = app.listen(env_config.port, () =>
   //   console.log(`server running on post ${env_config.port}`),
