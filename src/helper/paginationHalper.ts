@@ -12,7 +12,7 @@ type IPaginationReturn = {
   sortBy: string
   sortOrder: string
 }
-
+//* calculate pagination
 export const calculatePagination = (options: IOptions): IPaginationReturn => {
   const page = Number(options.page || 1)
   const limit = Number(options.limit || 10)
