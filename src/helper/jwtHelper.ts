@@ -8,6 +8,7 @@ const tokenGenerate = (
   return token
 }
 
+//* verify token
 const verifyToken = (token: string, secret: Secret): JwtPayload => {
   return jwt.verify(token, secret) as JwtPayload
 }
