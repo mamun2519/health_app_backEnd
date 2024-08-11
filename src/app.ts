@@ -17,7 +17,7 @@ app.use([
 app.use(cors())
 
 // app.use(express.urlencoded({ extended: true }))
-// application route
+// application route*
 app.use('/api/v1', RootRoutes)
 // Social Media route
 // app.use('/api/v1/bloodMedia', BloodMediaRoutes)
