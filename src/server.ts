@@ -12,6 +12,7 @@ import { createClient } from 'redis'
 //   },
 // })
 
+//* connect to redis for cashing
 export const client = createClient({
   url: 'redis://default:dxqQXmpYRA9nKjKI65ovxZpYD1p2fX9Y@redis-12744.c323.us-east-1-2.ec2.redns.redis-cloud.com:12744',
 })
