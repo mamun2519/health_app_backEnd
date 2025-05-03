@@ -36,7 +36,11 @@ async function bootstrap() {
   )
 
   //* connect to redis server-
-  await client.connect()
+  // disconnected redis server
+  // client.on('connect', () => {
+  //   console.log('Connected to Redis')
+  // })
+  // await client.connect()
   const existHandler = () => {
     if (server) {
       server.close(() => {
