@@ -2,7 +2,7 @@ import app from './app'
 import { env_config } from './config'
 import http from 'http'
 const server: http.Server = http.createServer(app)
-import { createClient } from 'redis'
+// import { createClient } from 'redis'
 //* connect to redis for cashing
 // export const client = createClient({
 //   password: 'dxqQXmpYRA9nKjKI65ovxZpYD1p2fX9Y',
@@ -13,9 +13,9 @@ import { createClient } from 'redis'
 // })
 
 //* connect to redis for cashing
-export const client = createClient({
-  url: 'redis://default:dxqQXmpYRA9nKjKI65ovxZpYD1p2fX9Y@redis-12744.c323.us-east-1-2.ec2.redns.redis-cloud.com:12744',
-})
+// export const client = createClient({
+//   url: 'redis://default:dxqQXmpYRA9nKjKI65ovxZpYD1p2fX9Y@redis-12744.c323.us-east-1-2.ec2.redns.redis-cloud.com:12744',
+// })
 
 // //handle success message
 // client.on('connect', () => {
